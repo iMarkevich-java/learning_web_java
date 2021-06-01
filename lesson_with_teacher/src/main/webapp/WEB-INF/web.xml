@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+  <servlet>
+    <servlet-name>dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>personListServlet</servlet-name>
+    <servlet-class>my.project.servlet.PersonListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>myHomeServlet</servlet-name>
+    <servlet-class>servlet.HomeServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>formData</servlet-name>
+    <servlet-class>servlet.FormDataServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>myHomeServlet</servlet-name>
+    <url-pattern>/home</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>formData</servlet-name>
+    <url-pattern>/data</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>personListServlet</servlet-name>
+    <url-pattern>/person/list</url-pattern>
+  </servlet-mapping>
+</web-app>
