@@ -1,11 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DocType html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, java.text.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
 	<head>
-        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
     	<title>Сделаем ваш первый бесплатный веб сайт</title>
     </head>
@@ -29,19 +28,19 @@
 		    			                    </div>
 			    		                    <label>Фото:</label>
                                             <div class="row">
-                                                <input type="file" name="image" id="image" accept="image/jpg" multiple="multiple">
+                                                <input type="file" name="photo" id="photo" accept="image/jpg" multiple="multiple"/>
                                             </div>
                                             <label>Имя:</label>
                                             <div class="row">
-                                                <input name="employeeFirstNameParam" type="text" value = "${employeeFirstName}" placeholder="Введите имя"></input>
+                                                <input name="employeeFirstName" type="text" value = "${employeeFirstName}" placeholder="Введите имя"/>
                                             </div>
                                             <label>Фамилия:</label>
                                             <div class="row">
-                                                <input name="employeeSurnameParam" type="text" value = "${employeeSurname}" placeholder="Введите фамилию"></input>
+                                                <input name="employeeSurname" type="text" value = "${employeeSurname}" placeholder="Введите фамилию"/>
                                             </div>
                                             <label>Дата рождения:</label>
                                             <div class="row">
-                                                <input name="employeeDateOfBornParam" type="date" value = "${employeeDateOfBorn}"></input>
+                                                <input name="employeeDateOfBornParam" type="date" value = "${employeeDateOfBorn}"/>
                                             </div>
                                             <label>Должность:</label>
                                             <div class="row">
@@ -63,7 +62,7 @@
                                             </div>
                                             <label>Стаж:</label>
                                             <div class="row">
-                                                <input name="experienceParam" type="number" value = "${experienceParam}"></input>
+                                                <input name="experienceParam" type="number" value = "${experienceParam}"/>
                                             </div>
                                         </td>
 							            <td valign="top">
@@ -72,31 +71,31 @@
                                             </div>
                                             <label>Страна:</label>
                                             <div class="row">
-                                                <input name="addressCountryParam" type="text" value = "${addressCountry}" placeholder="Введите название страны"></input>
+                                                <input name="addressCountryParam" type="text" value = "${addressCountry}" placeholder="Введите название страны"/>
                                             </div>
                                             <label>Область:</label>
                                             <div class="row">
-                                                <input name="addressRegionParam" type="text" value = "${addressRegion}" placeholder="Введите название области"></input>
+                                                <input name="addressRegionParam" type="text" value = "${addressRegion}" placeholder="Введите название области"/>
                                             </div>
                                             <label>Район:</label>
                                             <div class="row">
-                                                <input name="addressLocalityParam" type="text" value = "${addressLocality}" placeholder="Введите название района"></input>
+                                                <input name="addressLocalityParam" type="text" value = "${addressLocality}" placeholder="Введите название района"/>
                                             </div>
                                             <label>Город (населенный пункт):</label>
                                             <div class="row">
-                                                <input name="addressCityParam" type="text" value = "${addressCity}" placeholder="Введите название города"></input>
+                                                <input name="addressCityParam" type="text" value = "${addressCity}" placeholder="Введите название города"/>
                                             </div>
                                             <label>Улица:</label>
                                             <div class="row">
-                                                <input name="addressStreetParam" type="text" value = "${addressStreet}" placeholder="Введите название улицы"></input>
+                                                <input name="addressStreetParam" type="text" value = "${addressStreet}" placeholder="Введите название улицы"/>
                                             </div>
                                             <label>Дом:</label>
                                             <div class="row">
-                                                <input name="addressHouseParam" type="number" value = "${addressHouse}" placeholder="Введите название дома"></input>
+                                                <input name="addressHouseParam" type="number" value = "${addressHouse}" placeholder="Введите название дома"/>
                                             </div>
                                             <label>Квартира (офис):</label>
                                             <div class="row">
-                                                <input name="addressFlatParam" type="number" value = "${addressFlat}" placeholder="Введите название квартиры"></input>
+                                                <input name="addressFlatParam" type="number" value = "${addressFlat}" placeholder="Введите название квартиры"/>
                                             </div>
                         			    </td>
                        			    </tr>

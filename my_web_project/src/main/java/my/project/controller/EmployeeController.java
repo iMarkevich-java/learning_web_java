@@ -1,5 +1,7 @@
 package my.project.controller;
 
+import my.project.dto.EmployeeDTO;
+import my.project.entity.Address;
 import my.project.entity.Employee;
 import my.project.exceptions.EmployeeWebException;
 import my.project.repository.EmployeeRepository;
@@ -55,14 +57,16 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "/registration")
-    public String returnRegistrationPageEmployee() {
+    public String returnRegistrationPageEmployee(Model model) {
+        model.addAttribute("address", new Address());
         return "employee/registration/index";
     }
 
-    @PostMapping(value = "/registration", produces = "text/plain;charset=utf-8")
-    public String addEmployee(@RequestPart(value = "image", required = false) MultipartFile employeePhotoParam,
-                              @RequestParam(name = "employeeFirstNameParam") String employeeFirstNameParam,
-                              @RequestParam(name = "employeeSurnameParam") String employeeSurnameParam,
+    @PostMapping(value = "/registration", produces = "text/plain;charset=UTF-8")
+    public String addEmployee(@RequestPart(value = "photo", required = false) MultipartFile employeePhotoParam,
+                              @RequestPart(required = false) Employee employee,
+                              @RequestParam(name = "employeeFirstName") String employeeFirstNameParam,
+                              @RequestParam(name = "employeeSurname") String employeeSurnameParam,
                               @RequestParam(name = "employeeDateOfBornParam") String employeeDateOfBornParam,
                               @RequestParam(name = "employeePositionParam") String employeePositionParam,
                               @RequestParam(name = "departmentParam") String departmentParam,
@@ -75,8 +79,9 @@ public class EmployeeController {
                               @RequestParam(name = "addressHouseParam") Integer addressHouseParam,
                               @RequestParam(name = "addressFlatParam") Integer addressFlatParam,
                               Model model) {
+        BigInteger employeeId = null;
         try {
-            BigInteger employeeId = employeeService.createEmployee(employeePhotoParam, employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
+            employeeId = employeeService.createEmployee(employeePhotoParam, employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
             BigInteger addressId = addressService.createAddress(addressCountryParam, addressRegionParam, addressLocalityParam, addressCityParam, addressStreetParam, addressHouseParam, addressFlatParam);
             employeeAddressCommunicationService.createCommunication(employeeId, addressId);
             entityCommunicationService.createEntityCommunication(employeeId, employeePositionParam, departmentParam, experienceParam);

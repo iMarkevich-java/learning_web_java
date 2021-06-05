@@ -82,6 +82,17 @@ public class EmployeeService {
         return employee;
     }
 
+    public Employee readEmployeeById(BigInteger employeeIdBigInteger) {
+        Employee employee = dao.readById(employeeIdBigInteger);
+        Blob photo = employee.getPhoto();
+        try (InputStream binaryStream = photo.getBinaryStream(1, photo.length())) {
+            ImageIO.write(ImageIO.read(binaryStream), "JPG", new File("src/main/webapp/images/employeePhoto.jpg"));
+        } catch (SQLException | IOException throwables) {
+            throwables.printStackTrace();
+        }
+        return employee;
+    }
+
     public List<Employee> readAllEmployee() {
         return dao.readAll();
     }
