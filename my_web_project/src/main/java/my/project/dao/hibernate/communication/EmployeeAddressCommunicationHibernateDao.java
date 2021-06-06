@@ -4,7 +4,6 @@ import my.project.dao.Dao;
 import my.project.dao.hibernate.HibernateSessionInitialized;
 import my.project.entity.EmployeeAddressCommunication;
 import my.project.exceptions.EmployeeAddressCommunicationHibernateWebException;
-import my.project.exceptions.EmployeeWebException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

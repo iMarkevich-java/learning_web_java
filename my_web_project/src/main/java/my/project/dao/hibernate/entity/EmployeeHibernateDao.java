@@ -7,17 +7,12 @@ import my.project.exceptions.EmployeeWebException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
 import java.util.List;
 
+
 public class EmployeeHibernateDao implements Dao<Employee> {
-
-    @Autowired
-    HibernateSessionInitialized hibernateSessionInitialized;
-
-
 
     @Override
     public void create(Employee employee) {

@@ -2,7 +2,6 @@ package my.project.entity;
 
 import javax.persistence.*;
 import java.math.BigInteger;
-import java.util.Objects;
 
 @Entity
 @Table(name = "address")
@@ -34,7 +33,7 @@ public class Address {
     @Column(name = "flat")
     private int flat;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinTable(name = "employee_address_communication", joinColumns = @JoinColumn(name = "address_id_fk"), inverseJoinColumns = @JoinColumn(name = "employee_id_fk"))
     private Employee employee;
 
@@ -141,7 +140,7 @@ public class Address {
 //        return house == address.house && flat == address.flat && addressId.equals(address.addressId) && country.equals(address.country) && region.equals(address.region) && locality.equals(address.locality) && city.equals(address.city) && street.equals(address.street) && developer.equals(address.developer);
 //    }
 
-//    @Override
+    //    @Override
 //    public int hashCode() {
 //        return Objects.hash(addressId, country, region, locality, city, street, house, flat, developer);
 //    }

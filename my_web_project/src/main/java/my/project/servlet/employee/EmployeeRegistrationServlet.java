@@ -2,6 +2,7 @@ package my.project.servlet.employee;
 
 import my.project.exceptions.EmployeeWebException;
 import my.project.service.entity.EmployeeService;
+import my.project.service.entity.StringToSqlDate;
 import org.apache.commons.io.IOUtils;
 
 import javax.servlet.ServletException;
@@ -42,7 +43,7 @@ public class EmployeeRegistrationServlet extends HttpServlet {
         String employeeAgeParam = req.getParameter("employeeAgeParam");
         String employeePositionParam = req.getParameter("employeePositionParam");
         try {
-            new EmployeeService().createEmployee(imageBlob, employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
+            new EmployeeService().createEmployee(imageBlob, employeeFirstNameParam, employeeSurnameParam, new StringToSqlDate().parse(employeeDateOfBornParam), employeePositionParam);
             req.getRequestDispatcher("/employees").forward(req, resp);
         } catch (EmployeeWebException e) {
             List<String> errorList = e.getErrorList();

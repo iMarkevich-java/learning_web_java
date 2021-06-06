@@ -30,21 +30,21 @@ public class Employee {
     @Column(name = "employee_position")
     private String employeePosition;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinTable(name = "employee_address_communication", joinColumns = @JoinColumn(name = "employee_id_fk"), inverseJoinColumns = @JoinColumn(name = "address_id_fk"))
     private Address address;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinTable(name = "employee_developer_communication", joinColumns = @JoinColumn(name = "employee_id_fk"), inverseJoinColumns = @JoinColumn(name = "developer_id_fk"))
     private Developer developer;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinTable(name = "employee_manager_communication", joinColumns = @JoinColumn(name = "employee_id_fk"), inverseJoinColumns = @JoinColumn(name = "manager_id_fk"))
     private Manager manager;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinTable(name = "employee_qa_engineer_communication", joinColumns = @JoinColumn(name = "employee_id_fk"), inverseJoinColumns = @JoinColumn(name = "qa_engineer_id_fk"))
-    private QAEngineer qaEngineer;
+    private QaEngineer qaEngineer;
 
     public Employee() {
     }
@@ -138,11 +138,11 @@ public class Employee {
         this.address = address;
     }
 
-    public QAEngineer getQaEngineer() {
+    public QaEngineer getQaEngineer() {
         return qaEngineer;
     }
 
-    public void setQaEngineer(QAEngineer qaEngineer) {
+    public void setQaEngineer(QaEngineer qaEngineer) {
         this.qaEngineer = qaEngineer;
     }
 

@@ -1,7 +1,7 @@
 package my.project.entity;
 
 public enum Positions {
-    MANAGER ("Manager"),
+    MANAGER("Manager"),
     DEVELOPER("Developer"),
     QA_ENGINEER("QA engineer");
 

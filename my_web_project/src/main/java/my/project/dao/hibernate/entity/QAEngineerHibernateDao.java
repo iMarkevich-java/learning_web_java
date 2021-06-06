@@ -2,9 +2,7 @@ package my.project.dao.hibernate.entity;
 
 import my.project.dao.Dao;
 import my.project.dao.hibernate.HibernateSessionInitialized;
-import my.project.entity.Address;
-import my.project.entity.QAEngineer;
-import my.project.exceptions.AddressWebException;
+import my.project.entity.QaEngineer;
 import my.project.exceptions.QAEngineerWebException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -13,14 +11,14 @@ import org.hibernate.Transaction;
 import java.math.BigInteger;
 import java.util.List;
 
-public class QAEngineerHibernateDao implements Dao<QAEngineer> {
+public class QAEngineerHibernateDao implements Dao<QaEngineer> {
     @Override
-    public void create(QAEngineer createQAEngineer) {
+    public void create(QaEngineer createQaEngineer) {
         try (Session session = HibernateSessionInitialized.getHibernateSessionInitialized()
                 .getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
-                session.save(createQAEngineer);
+                session.save(createQaEngineer);
                 transaction.commit();
             } catch (Exception e) {
                 transaction.rollback();
@@ -34,12 +32,12 @@ public class QAEngineerHibernateDao implements Dao<QAEngineer> {
     }
 
     @Override
-    public void update(QAEngineer updateQAEngineer) {
+    public void update(QaEngineer updateQaEngineer) {
         try (Session session = HibernateSessionInitialized.getHibernateSessionInitialized()
                 .getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
-                session.update(updateQAEngineer);
+                session.update(updateQaEngineer);
                 transaction.commit();
             } catch (Exception e) {
                 transaction.rollback();
@@ -57,9 +55,9 @@ public class QAEngineerHibernateDao implements Dao<QAEngineer> {
         try (Session session = HibernateSessionInitialized.getHibernateSessionInitialized()
                 .getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            QAEngineer deleteQAEngineer = readById(deleteQAEngineerId);
+            QaEngineer deleteQaEngineer = readById(deleteQAEngineerId);
             try {
-                session.delete(deleteQAEngineer);
+                session.delete(deleteQaEngineer);
                 transaction.commit();
             } catch (Exception e) {
                 transaction.rollback();
@@ -73,13 +71,13 @@ public class QAEngineerHibernateDao implements Dao<QAEngineer> {
     }
 
     @Override
-    public List<QAEngineer> readAll() {
-        List<QAEngineer> qAEngineerList;
+    public List<QaEngineer> readAll() {
+        List<QaEngineer> qAEngineerList;
         try (Session session = HibernateSessionInitialized.getHibernateSessionInitialized()
                 .getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
-                qAEngineerList = session.createQuery("from QAEngineer", QAEngineer.class).list();
+                qAEngineerList = session.createQuery("from QAEngineer", QaEngineer.class).list();
                 transaction.commit();
             } catch (Exception e) {
                 transaction.rollback();
@@ -94,13 +92,13 @@ public class QAEngineerHibernateDao implements Dao<QAEngineer> {
     }
 
     @Override
-    public QAEngineer readById(BigInteger readQAEngineerId) {
-        QAEngineer qAEngineer;
+    public QaEngineer readById(BigInteger readQAEngineerId) {
+        QaEngineer qAEngineer;
         try (Session session = HibernateSessionInitialized.getHibernateSessionInitialized()
                 .getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
-                qAEngineer = session.get(QAEngineer.class, readQAEngineerId);
+                qAEngineer = session.get(QaEngineer.class, readQAEngineerId);
                 transaction.commit();
             } catch (Exception e) {
                 transaction.rollback();
@@ -115,14 +113,14 @@ public class QAEngineerHibernateDao implements Dao<QAEngineer> {
     }
 
     @Override
-    public List<QAEngineer> readAllByParameterAndValues(String parameter, String values) {
-        List<QAEngineer> qAEngineerList;
+    public List<QaEngineer> readAllByParameterAndValues(String parameter, String values) {
+        List<QaEngineer> qAEngineerList;
         try (Session session = HibernateSessionInitialized.getHibernateSessionInitialized()
                 .getSessionFactory().openSession()) {
             String sql = "FROM QAEngineer qAEngineer WHERE qAEngineer." + parameter + "='" + values + "'";
             Transaction transaction = session.beginTransaction();
             try {
-                qAEngineerList = session.createQuery(sql, QAEngineer.class).list();
+                qAEngineerList = session.createQuery(sql, QaEngineer.class).list();
                 transaction.commit();
             } catch (Exception e) {
                 transaction.rollback();
@@ -137,13 +135,13 @@ public class QAEngineerHibernateDao implements Dao<QAEngineer> {
     }
 
     @Override
-    public List<QAEngineer> readAllByHqlQuery(String sql) {
-        List<QAEngineer> qAEngineerList;
+    public List<QaEngineer> readAllByHqlQuery(String sql) {
+        List<QaEngineer> qAEngineerList;
         try (Session session = HibernateSessionInitialized.getHibernateSessionInitialized()
                 .getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
-                qAEngineerList = session.createQuery(sql, QAEngineer.class).list();
+                qAEngineerList = session.createQuery(sql, QaEngineer.class).list();
                 transaction.commit();
             } catch (Exception e) {
                 transaction.rollback();

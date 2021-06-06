@@ -19,7 +19,7 @@ public class Developer {
     @Column(name = "developer_experience")
     private int developerExperience;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne()
     @JoinTable(name = "employee_developer_communication", joinColumns = @JoinColumn(name = "developer_id_fk"), inverseJoinColumns = @JoinColumn(name = "employee_id_fk"))
     private Employee employee;
 
@@ -68,26 +68,19 @@ public class Developer {
     public void setEmployee(Employee employee) {
         this.employee = employee;
     }
-//    public Address getAddress() {
-//        return address;
-//    }
-//
-//    public void setAddress(Address address) {
-//        this.address = address;
-//    }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Developer developer = (Developer) o;
-//        return developerExperience == developer.developerExperience && developerId.equals(developer.developerId) && developerDepartment.equals(developer.developerDepartment) && address.equals(developer.address);
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Developer developer = (Developer) o;
+        return developerExperience == developer.developerExperience && developerId.equals(developer.developerId) && developerDepartment.equals(developer.developerDepartment) && employee.equals(developer.employee);
+    }
 
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(developerId, developerDepartment, developerExperience, address);
-//    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(developerId, developerDepartment, developerExperience, employee);
+    }
 
     @Override
     public String toString() {

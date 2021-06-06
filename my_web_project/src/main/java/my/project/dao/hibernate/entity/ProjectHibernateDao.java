@@ -2,9 +2,7 @@ package my.project.dao.hibernate.entity;
 
 import my.project.dao.Dao;
 import my.project.dao.hibernate.HibernateSessionInitialized;
-import my.project.entity.Address;
 import my.project.entity.Project;
-import my.project.exceptions.AddressWebException;
 import my.project.exceptions.ProjectWebException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;

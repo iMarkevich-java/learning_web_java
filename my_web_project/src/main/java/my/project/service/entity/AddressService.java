@@ -1,9 +1,12 @@
 package my.project.service.entity;
 
 import my.project.dao.hibernate.entity.AddressHibernateDao;
+import my.project.dao.repository.AddressRepositoryDao;
 import my.project.entity.Address;
-import my.project.exceptions.ClientWebException;
-import my.project.exceptions.EmployeeWebException;
+import my.project.exceptions.AddressWebException;
+import my.project.service.communication.EmployeeAddressCommunicationService;
+import my.project.service.communication.EmployeeQAEngineerCommunicationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -12,48 +15,52 @@ import java.util.List;
 
 @Service
 public class AddressService {
-    boolean flag;
+
+    @Autowired
+    AddressRepositoryDao addressRepositoryDao;
+
+    @Autowired
+    EmployeeAddressCommunicationService employeeAddressCommunicationService;
+
     final private AddressHibernateDao dao;
+
+    boolean flag;
 
     public AddressService() {
         dao = new AddressHibernateDao();
     }
 
     public BigInteger createAddress(String addressCountryParam, String addressRegionParam, String addressLocalityParam, String addressCityParam, String addressStreetParam, int addressHouseParam, int addressFlatParam) {
-//        checkAllParameterOnException(employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
-
+        checkAllParameterOnException(addressCountryParam, addressRegionParam, addressLocalityParam, addressCityParam, addressStreetParam, addressHouseParam, addressFlatParam);
         Address address = new Address(addressCountryParam, addressRegionParam, addressLocalityParam, addressCityParam, addressStreetParam, addressHouseParam, addressFlatParam);
-        dao.create(address);
+//        dao.create(address);
+        addressRepositoryDao.create(address);
         return address.getAddressId();
     }
 
-    public void updateAddressById(String updateAddressIdParam, String updateAddressCountryParam, String updateAddressRegionParam, String updateAddressLocalityParam, String updateAddressCityParam, String updateAddressStreetParam, String updateAddressHouseParam, String updateAddressFlatParam) {
-        ArrayList<String> errorList = new ArrayList<>();
-        if (updateAddressIdParam.isEmpty() || updateAddressCountryParam.isEmpty() || updateAddressRegionParam.isEmpty() || updateAddressLocalityParam.isEmpty() || updateAddressCityParam.isEmpty() || updateAddressStreetParam.isEmpty() || updateAddressHouseParam.isEmpty() || updateAddressFlatParam.isEmpty()) {
-            String errorMessage = "All fields can't be empty";
-            errorList.add(errorMessage);
-            throw new ClientWebException(errorList);
-        }
-        BigInteger id = new BigInteger(updateAddressIdParam);
-        int house = Integer.parseInt(updateAddressHouseParam);
-        int flat = Integer.parseInt(updateAddressFlatParam);
-        Address updateAddress = new Address(id, updateAddressCountryParam, updateAddressRegionParam, updateAddressLocalityParam, updateAddressCityParam, updateAddressStreetParam, house, flat);
-        dao.update(updateAddress);
+    public void updateAddressById(String updateAddressIdParam, String updateAddressCountryParam, String updateAddressRegionParam, String updateAddressLocalityParam, String updateAddressCityParam, String updateAddressStreetParam, int updateAddressHouseParam, int updateAddressFlatParam) {
+        checkAllParameterOnException(updateAddressIdParam, updateAddressCountryParam, updateAddressRegionParam, updateAddressLocalityParam, updateAddressCityParam, updateAddressStreetParam, updateAddressHouseParam, updateAddressFlatParam);
+        BigInteger employeeId = readAddressById(updateAddressIdParam).getEmployee().getEmployeeId();
+        Address updateAddress = new Address(new BigInteger(updateAddressIdParam), updateAddressCountryParam, updateAddressRegionParam, updateAddressLocalityParam, updateAddressCityParam, updateAddressStreetParam, updateAddressHouseParam, updateAddressFlatParam);
+//        dao.update(updateAddress);
+        addressRepositoryDao.update(updateAddress);
+        employeeAddressCommunicationService.updateCommunication(employeeId, updateAddress.getAddressId());
     }
 
     public void deleteAddressById(String deleteAddressIdParam) {
         BigInteger deleteAddressId = new BigInteger(deleteAddressIdParam);
-        dao.delete(deleteAddressId);
+//        dao.delete(deleteAddressId);
+        addressRepositoryDao.delete(deleteAddressId);
     }
 
-    public Address readAddressById(BigInteger addressId) {
-        Address address = (Address) dao.readById(addressId);
-        return address;
+    public Address readAddressById(String addressId) {
+//        Address address = (Address) dao.readById(addressId);
+        return addressRepositoryDao.readById(new BigInteger(addressId));
     }
 
     public List<Address> readAllAddress() {
-        List<Address> addresses = dao.readAll();
-        return addresses;
+//        List<Address> addresses = dao.readAll();
+        return addressRepositoryDao.readAll();
     }
 
     private String checkParameter(String parameterName, String parameterValue, String sql) {
@@ -77,69 +84,94 @@ public class AddressService {
         return hqlString;
     }
 
-    private void checkAllParameterOnException(String employeeFirstNameParam, String employeeSurnameParam, String employeeDateOfBornParam, String employeePositionParam) {
+    private void checkAllParameterOnException(String addressCountryParam, String addressRegionParam, String addressLocalityParam, String addressCityParam, String addressStreetParam, int addressHouseParam, int addressFlatParam) {
         boolean flag = false;
         ArrayList<String> errorList = new ArrayList<>();
-        if (employeeFirstNameParam.isEmpty()) {
-            String errorMessage = "Employee first name can't be empty!!!";
+        if (addressCountryParam.isEmpty()) {
+            String errorMessage = "Country can't be empty!!!";
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeeFirstNameParam.isEmpty()) {
-            String errorMessage = "Employee first name can't be empty!!!";
+        if (addressRegionParam.isEmpty()) {
+            String errorMessage = "Region can't be empty!!!";
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeeSurnameParam.isEmpty()) {
-            String errorMessage = "Employee surname can't be empty";
+        if (addressLocalityParam.isEmpty()) {
+            String errorMessage = "Locality can't be empty";
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeeDateOfBornParam.isEmpty()) {
-            String errorMessage = "Employee date of born can't be empty";
+        if (addressCityParam.isEmpty()) {
+            String errorMessage = "City can't be empty";
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeePositionParam.isEmpty()) {
-            String errorMessage = "Employee position can't be empty";
+        if (addressStreetParam.isEmpty()) {
+            String errorMessage = "Street can't be empty";
+            errorList.add(errorMessage);
+            flag = true;
+        }
+        if (addressHouseParam == 0) {
+            String errorMessage = "House can't be empty";
+            errorList.add(errorMessage);
+            flag = true;
+        }
+        if (addressFlatParam == 0) {
+            String errorMessage = "Flat can't be empty";
             errorList.add(errorMessage);
             flag = true;
         }
         if (flag) {
-            throw new EmployeeWebException(errorList);
+            throw new AddressWebException(errorList);
         }
     }
 
-    private void checkAllParameterOnException(String employeeId, String employeeFirstNameParam, String employeeSurnameParam, String employeeDateOfBornParam, String employeePositionParam) {
+    private void checkAllParameterOnException(String addressIdParam, String addressCountryParam, String addressRegionParam, String addressLocalityParam, String addressCityParam, String addressStreetParam, int addressHouseParam, int addressFlatParam) {
         boolean flag = false;
         ArrayList<String> errorList = new ArrayList<>();
-        if (employeeId.isEmpty()) {
-            String errorMessage = "Employee id can't be empty!!!";
+        if (addressIdParam.isEmpty()) {
+            String errorMessage = "Address id can't be empty!!!";
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeeFirstNameParam.isEmpty()) {
-            String errorMessage = "Employee first name can't be empty!!!";
+        if (addressCountryParam.isEmpty()) {
+            String errorMessage = "Country can't be empty!!!";
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeeSurnameParam.isEmpty()) {
-            String errorMessage = "Employee surname can't be empty";
+        if (addressRegionParam.isEmpty()) {
+            String errorMessage = "Region can't be empty!!!";
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeeDateOfBornParam.isEmpty()) {
-            String errorMessage = "Employee date of born can't be empty";
+        if (addressLocalityParam.isEmpty()) {
+            String errorMessage = "Locality can't be empty";
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeePositionParam.isEmpty()) {
-            String errorMessage = "Employee position can't be empty";
+        if (addressCityParam.isEmpty()) {
+            String errorMessage = "City can't be empty";
+            errorList.add(errorMessage);
+            flag = true;
+        }
+        if (addressStreetParam.isEmpty()) {
+            String errorMessage = "Street can't be empty";
+            errorList.add(errorMessage);
+            flag = true;
+        }
+        if (addressHouseParam == 0) {
+            String errorMessage = "House can't be empty";
+            errorList.add(errorMessage);
+            flag = true;
+        }
+        if (addressFlatParam == 0) {
+            String errorMessage = "Flat can't be empty";
             errorList.add(errorMessage);
             flag = true;
         }
         if (flag) {
-            throw new EmployeeWebException(errorList);
+            throw new AddressWebException(errorList);
         }
     }
 }

@@ -3,7 +3,6 @@ package my.project.dao.hibernate.communication;
 import my.project.dao.Dao;
 import my.project.dao.hibernate.HibernateSessionInitialized;
 import my.project.entity.EmployeeQAEngineerCommunication;
-import my.project.exceptions.EmployeeManagerCommunicationHibernateWebException;
 import my.project.exceptions.EmployeeQAEngineerCommunicationHibernateWbException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;

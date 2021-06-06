@@ -2,7 +2,7 @@ package my.project.exceptions;
 
 import java.util.List;
 
-public class EmployeeAddressCommunicationHibernateWebException extends RuntimeException{
+public class EmployeeAddressCommunicationHibernateWebException extends RuntimeException {
     private List<String> errorList;
 
     public EmployeeAddressCommunicationHibernateWebException() {

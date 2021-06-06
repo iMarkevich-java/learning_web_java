@@ -30,12 +30,13 @@
         <mapping class="my.project.entity.Employee"/>
         <mapping class="my.project.entity.Project"/>
         <mapping class="my.project.entity.Developer"/>
-        <mapping class="my.project.entity.QAEngineer"/>
+        <mapping class="my.project.entity.QaEngineer"/>
         <mapping class="my.project.entity.Manager"/>
         <mapping class="my.project.entity.EmployeeAddressCommunication"/>
         <mapping class="my.project.entity.EmployeeDeveloperCommunication"/>
         <mapping class="my.project.entity.EmployeeManagerCommunication"/>
         <mapping class="my.project.entity.EmployeeQAEngineerCommunication"/>
+
 
         <!--        <mapping file=""/>-->
 

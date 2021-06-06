@@ -19,7 +19,7 @@ public class Manager {
     @Column(name = "manager_experience")
     private int managerExperience;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinTable(name = "employee_manager_communication", joinColumns = @JoinColumn(name = "manager_id_fk"), inverseJoinColumns = @JoinColumn(name = "employee_id_fk"))
     private Employee employee;
 
@@ -27,6 +27,12 @@ public class Manager {
     }
 
     public Manager(String managerDepartment, int managerExperience) {
+        this.managerDepartment = managerDepartment;
+        this.managerExperience = managerExperience;
+    }
+
+    public Manager(BigInteger managerId, String managerDepartment, int managerExperience) {
+        this.managerId = managerId;
         this.managerDepartment = managerDepartment;
         this.managerExperience = managerExperience;
     }

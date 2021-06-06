@@ -2,7 +2,7 @@ package my.project.exceptions;
 
 import java.util.List;
 
-public class EmployeeQAEngineerCommunicationHibernateWbException extends RuntimeException{
+public class EmployeeQAEngineerCommunicationHibernateWbException extends RuntimeException {
     private List<String> errorList;
 
     public EmployeeQAEngineerCommunicationHibernateWbException() {

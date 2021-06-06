@@ -1,9 +1,11 @@
 package my.project.service.entity;
 
 import my.project.dao.hibernate.entity.ManagerHibernateDao;
+import my.project.dao.repository.ManagerRepositoryDao;
 import my.project.entity.Manager;
-import my.project.exceptions.DeveloperWebException;
-import my.project.exceptions.EmployeeWebException;
+import my.project.exceptions.ManagerWebException;
+import my.project.service.communication.EmployeeManagerCommunicationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -12,147 +14,93 @@ import java.util.List;
 
 @Service
 public class ManagerService {
-    private boolean flag = false;
 
-    private ManagerHibernateDao dao;
+    @Autowired
+    EmployeeManagerCommunicationService employeeManagerCommunicationService;
+
+    @Autowired
+    ManagerRepositoryDao managerRepositoryDao;
+
+    private final ManagerHibernateDao dao;
 
     public ManagerService() {
         dao = new ManagerHibernateDao();
     }
 
     public BigInteger createManager(String managerDepartmentParam, String managerExperienceParam) {
+        checkAllParameterOnException(managerDepartmentParam, managerExperienceParam);
         int managerExperience = Integer.parseInt(managerExperienceParam);
         Manager manager = new Manager(managerDepartmentParam, managerExperience);
-        dao.create(manager);
+//        dao.create(manager);
+        managerRepositoryDao.create(manager);
         return manager.getManagerId();
     }
 
-    public void updateManagerById(String updateDeveloperIdParam, String updateDeveloperDepartmentParam, String updateDeveloperExperienceParam) {
-        ArrayList<String> errorList = new ArrayList<>();
-        if (updateDeveloperDepartmentParam.isEmpty() || updateDeveloperExperienceParam.isEmpty()) {
-            String errorMessage = "Department or experience  can't be empty";
-            errorList.add(errorMessage);
-            throw new DeveloperWebException(errorList);
-        }
-
-        BigInteger updateDeveloperId = new BigInteger(updateDeveloperIdParam);
-        int updateDeveloperExperience = Integer.parseInt(updateDeveloperExperienceParam);
-        Manager manager = new Manager();
-        dao.update(manager);
+    public void updateManagerById(String updateManagerIdParam, String updateManagerDepartmentParam, String updateManagerExperienceParam) {
+        checkAllParameterOnException(updateManagerIdParam, updateManagerDepartmentParam, updateManagerExperienceParam);
+        int updateManagerExperience = Integer.parseInt(updateManagerExperienceParam);
+        BigInteger employeeId = readManagerById(updateManagerIdParam).getEmployee().getEmployeeId();
+        Manager manager = new Manager(new BigInteger(updateManagerIdParam), updateManagerDepartmentParam, updateManagerExperience);
+//        dao.update(manager);
+        managerRepositoryDao.update(manager);
+        employeeManagerCommunicationService.updateCommunication(employeeId, manager.getManagerId());
     }
 
-    public void deleteDeveloperById(String deleteDeveloperIdParam) {
-        BigInteger deleteClientId = new BigInteger(deleteDeveloperIdParam);
-        dao.delete(deleteClientId);
+    public void deleteManagerById(String deleteManagerIdParam) {
+        BigInteger deleteManagerId = new BigInteger(deleteManagerIdParam);
+//        dao.delete(deleteManagerId);
+        managerRepositoryDao.delete(deleteManagerId);
     }
 
-    public Manager readManagerById(String developerIdPParam) {
-        BigInteger developerId = new BigInteger(developerIdPParam);
-
-        return new Manager();
+    public Manager readManagerById(String managerIdParam) {
+        BigInteger managerId = new BigInteger(managerIdParam);
+        managerRepositoryDao.readById(managerId);
+        return managerRepositoryDao.readById(managerId);
     }
 
     public List<Manager> readAllManager() {
-        List<Manager> managers = dao.readAll();
-        return managers;
+//        List<Manager> managers = dao.readAll();
+        return managerRepositoryDao.readAll();
     }
 
-    public List<Manager> readAllManagerByParameter(String selectEmployeeIdParam, String selectEmployeeFirstNameParam, String selectEmployeeSurnameParam,
-                                                   String selectEmployeeDateOfBornParam, String selectEmployeePositionParam) {
-        flag = false;
-        String hql = checkAllParameter(selectEmployeeIdParam, selectEmployeeFirstNameParam, selectEmployeeSurnameParam, selectEmployeeDateOfBornParam, selectEmployeePositionParam);
-        hql = checkParameter("employee.employeeId", selectEmployeeIdParam, hql);
-        hql = checkParameter("employee.employeeFirstName", selectEmployeeFirstNameParam, hql);
-        hql = checkParameter("employee.employeeSurname", selectEmployeeSurnameParam, hql);
-        hql = checkParameter("employee.employeeDateOfBorn", selectEmployeeDateOfBornParam, hql);
-        hql = checkParameter("employee.employeePosition", selectEmployeePositionParam, hql);
-        return dao.readAllByHqlQuery(hql);
-    }
-
-    private String checkAllParameter(String... parameter) {
-        String hqlString;
-        if (parameter[0].isEmpty() && parameter[1].isEmpty() && parameter[2].isEmpty() &&
-                parameter[3].isEmpty() && parameter[4].isEmpty()) {
-            hqlString = "from Employee";
-        } else {
-            hqlString = "FROM Employee employee WHERE ";
-        }
-        return hqlString;
-    }
-
-    private String checkParameter(String parameterName, String parameterValue, String sql) {
-        if (!parameterValue.isEmpty() && this.flag) {
-            sql += " and " + parameterName + "='" + parameterValue + "'";
-        } else if (!parameterValue.isEmpty()) {
-            sql += parameterName + "='" + parameterValue + "'";
-            this.flag = true;
-        }
-        return sql;
-    }
-
-    private void checkAllParameterOnException(String employeeFirstNameParam, String employeeSurnameParam, String employeeDateOfBornParam, String employeePositionParam) {
+    private void checkAllParameterOnException(String managerDepartmentParam, String managerExperienceParam) {
         boolean flag = false;
         ArrayList<String> errorList = new ArrayList<>();
-        if (employeeFirstNameParam.isEmpty()) {
-            String errorMessage = "Employee first name can't be empty!!!";
+        if (managerDepartmentParam.isEmpty()) {
+            String errorMessage = "Manager department can't be empty!!!";
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeeFirstNameParam.isEmpty()) {
-            String errorMessage = "Employee first name can't be empty!!!";
-            errorList.add(errorMessage);
-            flag = true;
-        }
-        if (employeeSurnameParam.isEmpty()) {
-            String errorMessage = "Employee surname can't be empty";
-            errorList.add(errorMessage);
-            flag = true;
-        }
-        if (employeeDateOfBornParam.isEmpty()) {
-            String errorMessage = "Employee date of born can't be empty";
-            errorList.add(errorMessage);
-            flag = true;
-        }
-        if (employeePositionParam.isEmpty()) {
-            String errorMessage = "Employee position can't be empty";
+        if (managerExperienceParam.isEmpty()) {
+            String errorMessage = "Manager experience can't be empty!!!";
             errorList.add(errorMessage);
             flag = true;
         }
         if (flag) {
-            throw new EmployeeWebException(errorList);
+            throw new ManagerWebException(errorList);
         }
     }
 
-    private void checkAllParameterOnException(String employeeId, String employeeFirstNameParam, String employeeSurnameParam, String employeeDateOfBornParam, String employeePositionParam) {
+    private void checkAllParameterOnException(String managerIdParam, String managerDepartmentParam, String managerExperienceParam) {
         boolean flag = false;
         ArrayList<String> errorList = new ArrayList<>();
-        if (employeeId.isEmpty()) {
-            String errorMessage = "Employee id can't be empty!!!";
+        if (managerIdParam.isEmpty()) {
+            String errorMessage = "Manager id can't be empty!!!";
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeeFirstNameParam.isEmpty()) {
-            String errorMessage = "Employee first name can't be empty!!!";
+        if (managerDepartmentParam.isEmpty()) {
+            String errorMessage = "Manager department can't be empty!!!";
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeeSurnameParam.isEmpty()) {
-            String errorMessage = "Employee surname can't be empty";
-            errorList.add(errorMessage);
-            flag = true;
-        }
-        if (employeeDateOfBornParam.isEmpty()) {
-            String errorMessage = "Employee date of born can't be empty";
-            errorList.add(errorMessage);
-            flag = true;
-        }
-        if (employeePositionParam.isEmpty()) {
-            String errorMessage = "Employee position can't be empty";
+        if (managerExperienceParam.isEmpty()) {
+            String errorMessage = "Manager experience can't be empty!!!";
             errorList.add(errorMessage);
             flag = true;
         }
         if (flag) {
-            throw new EmployeeWebException(errorList);
+            throw new ManagerWebException(errorList);
         }
     }
 }

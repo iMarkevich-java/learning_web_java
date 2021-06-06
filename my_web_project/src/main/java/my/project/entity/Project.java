@@ -1,6 +1,7 @@
 package my.project.entity;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.util.Objects;
 
@@ -11,7 +12,7 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "project_id")
-    private int projectId;
+    private BigInteger projectId;
 
     @Column(name = "project_name")
     private String projectName;
@@ -35,7 +36,7 @@ public class Project {
         this.projectDeadline = projectDeadline;
     }
 
-    public Project(int projectId, String projectName, int projectBudget, int projectTimeLimit, Date projectDeadline) {
+    public Project(BigInteger projectId, String projectName, int projectBudget, int projectTimeLimit, Date projectDeadline) {
         this.projectId = projectId;
         this.projectName = projectName;
         this.projectBudget = projectBudget;
@@ -43,11 +44,11 @@ public class Project {
         this.projectDeadline = projectDeadline;
     }
 
-    public int getProjectId() {
+    public BigInteger getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(int projectId) {
+    public void setProjectId(BigInteger projectId) {
         this.projectId = projectId;
     }
 
@@ -84,26 +85,26 @@ public class Project {
     }
 
     @Override
-    public String toString() {
-        return "Project{" +
-                "projectId=" + projectId +
-                ", projectBudget=" + projectBudget +
-                ", projectName='" + projectName + '\'' +
-                ", projectTimeLimit=" + projectTimeLimit +
-                ", projectDeadline=" + projectDeadline +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Project project = (Project) o;
-        return projectId == project.projectId && projectBudget == project.projectBudget && projectTimeLimit == project.projectTimeLimit && projectName.equals(project.projectName) && projectDeadline.equals(project.projectDeadline);
+        return projectBudget == project.projectBudget && projectTimeLimit == project.projectTimeLimit && projectId.equals(project.projectId) && projectName.equals(project.projectName) && projectDeadline.equals(project.projectDeadline);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(projectId, projectBudget, projectName, projectTimeLimit, projectDeadline);
+        return Objects.hash(projectId, projectName, projectBudget, projectTimeLimit, projectDeadline);
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "projectId=" + projectId +
+                ", projectName='" + projectName + '\'' +
+                ", projectBudget=" + projectBudget +
+                ", projectTimeLimit=" + projectTimeLimit +
+                ", projectDeadline=" + projectDeadline +
+                '}';
     }
 }

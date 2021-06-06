@@ -1,9 +1,16 @@
 package my.project.service.entity;
 
 import my.project.dao.hibernate.entity.EmployeeHibernateDao;
+import my.project.dao.repository.EmployeeRepositoryDao;
 import my.project.entity.Employee;
+import my.project.entity.EmployeeAddressCommunication;
 import my.project.exceptions.EmployeeWebException;
+import my.project.service.communication.EmployeeAddressCommunicationService;
+import my.project.service.communication.EmployeeDeveloperCommunicationService;
+import my.project.service.communication.EmployeeManagerCommunicationService;
+import my.project.service.communication.EmployeeQAEngineerCommunicationService;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +30,21 @@ import java.util.List;
 @Service
 public class EmployeeService {
 
+    @Autowired
+    EmployeeAddressCommunicationService employeeAddressCommunicationService;
+
+    @Autowired
+    EmployeeDeveloperCommunicationService employeeDeveloperCommunicationService;
+
+    @Autowired
+    EmployeeManagerCommunicationService employeeManagerCommunicationService;
+
+    @Autowired
+    EmployeeQAEngineerCommunicationService employeeQAEngineerCommunicationService;
+
+    @Autowired
+    EmployeeRepositoryDao employeeRepositoryDao;
+
     final private EmployeeHibernateDao dao;
 
     private Boolean flag = false;
@@ -31,48 +53,67 @@ public class EmployeeService {
         this.dao = new EmployeeHibernateDao();
     }
 
-    public BigInteger createEmployee(Blob employeePhotoParam, String employeeFirstNameParam, String employeeSurnameParam, String employeeDateOfBornParam, String employeePositionParam) {
+    public BigInteger createEmployee(Blob employeePhotoParam, String employeeFirstNameParam, String employeeSurnameParam, Date employeeDateOfBornParam, String employeePositionParam) {
         checkAllParameterOnException(employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
-        Date dateOfBorn = new StringToSqlDate().parse(employeeDateOfBornParam);
-        Employee employee = new Employee(employeePhotoParam, employeeFirstNameParam, employeeSurnameParam, dateOfBorn, employeePositionParam);
-        dao.create(employee);
+        Employee employee = new Employee(employeePhotoParam, employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
+//        dao.create(employee);
+        employeeRepositoryDao.create(employee);
         return employee.getEmployeeId();
     }
 
-    public BigInteger createEmployee(MultipartFile employeePhotoParam, String employeeFirstNameParam, String employeeSurnameParam, String employeeDateOfBornParam, String employeePositionParam) {
+    public BigInteger createEmployee(MultipartFile employeePhotoParam, String employeeFirstNameParam, String employeeSurnameParam, Date employeeDateOfBornParam, String employeePositionParam) {
         checkAllParameterOnException(employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
-        Date dateOfBorn = new StringToSqlDate().parse(employeeDateOfBornParam);
         Blob employeePhotoBlob = convertMultiPartFileToBlob(employeePhotoParam, "src/main/webapp/images/tempImage.jpg");
-        Employee employee = new Employee(employeePhotoBlob, employeeFirstNameParam, employeeSurnameParam, dateOfBorn, employeePositionParam);
-        dao.create(employee);
+        Employee employee = new Employee(employeePhotoBlob, employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
+//        dao.create(employee);
+        employeeRepositoryDao.create(employee);
         return employee.getEmployeeId();
     }
 
-    public void updateEmployeeById(String updateEmployeeIdParam, Blob updateEmployeePhotoParam, String updateEmployeeFirstNameParam, String updateEmployeeSurnameParam, String updateEmployeeDateOfBornParam, String updateEmployeePositionParam) {
+    public void updateEmployeeById(String updateEmployeeIdParam, Blob updateEmployeePhotoParam, String updateEmployeeFirstNameParam, String updateEmployeeSurnameParam, Date updateEmployeeDateOfBornParam, String updateEmployeePositionParam) {
         checkAllParameterOnException(updateEmployeeIdParam, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, updateEmployeeDateOfBornParam, updateEmployeePositionParam);
         BigInteger employeeId = new BigInteger(updateEmployeeIdParam);
-        Date dateOfBorn = new StringToSqlDate().parse(updateEmployeeDateOfBornParam);
-        Employee updateEmployee = new Employee(employeeId, updateEmployeePhotoParam, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, dateOfBorn, updateEmployeePositionParam);
-        dao.update(updateEmployee);
+        Employee updateEmployee = new Employee(employeeId, updateEmployeePhotoParam, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, updateEmployeeDateOfBornParam, updateEmployeePositionParam);
+//        dao.update(updateEmployee);
+        employeeRepositoryDao.create(updateEmployee);
     }
 
-    public void updateEmployeeById(String updateEmployeeIdParam, MultipartFile updateEmployeePhotoParam, String updateEmployeeFirstNameParam, String updateEmployeeSurnameParam, String updateEmployeeDateOfBornParam, String updateEmployeePositionParam) {
+    public void updateEmployeeById(String updateEmployeeIdParam, MultipartFile updateEmployeePhotoParam, String updateEmployeeFirstNameParam, String updateEmployeeSurnameParam, Date updateEmployeeDateOfBornParam, String updateEmployeePositionParam) {
         checkAllParameterOnException(updateEmployeeIdParam, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, updateEmployeeDateOfBornParam, updateEmployeePositionParam);
-        BigInteger employeeId = new BigInteger(updateEmployeeIdParam);
-        Date dateOfBorn = new StringToSqlDate().parse(updateEmployeeDateOfBornParam);
         Blob employeePhotoBlob = convertMultiPartFileToBlob(updateEmployeePhotoParam, "src/main/webapp/images/employeePhoto.jpg");
-        Employee updateEmployee = new Employee(employeeId, employeePhotoBlob, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, dateOfBorn, updateEmployeePositionParam);
-        dao.update(updateEmployee);
+        Employee employee = readEmployeeById(updateEmployeeIdParam);
+        BigInteger addressId = employee.getAddress().getAddressId();
+        Employee updateEmployee = new Employee(new BigInteger(updateEmployeeIdParam), employeePhotoBlob, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, updateEmployeeDateOfBornParam, updateEmployeePositionParam);
+        if(updateEmployee.getManager() != null){
+            BigInteger managerId = employee.getManager().getManagerId();
+            employeeRepositoryDao.update(updateEmployee);
+            employeeAddressCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), addressId);
+            employeeManagerCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), managerId);
+        }
+        if(updateEmployee.getDeveloper() != null){
+            BigInteger developerId = employee.getDeveloper().getDeveloperId();
+            employeeRepositoryDao.update(updateEmployee);
+            employeeAddressCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), addressId);
+            employeeDeveloperCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), developerId);
+        }
+        if(updateEmployee.getQaEngineer() != null){
+            BigInteger qaEngineerId = employee.getQaEngineer().getqAEngineerId();
+            employeeRepositoryDao.update(updateEmployee);
+            employeeAddressCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), addressId);
+            employeeQAEngineerCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), qaEngineerId);
+        }
     }
 
     public void deleteEmployeeById(String deleteEmployeeIdParam) {
         BigInteger deleteEmployeeId = new BigInteger(deleteEmployeeIdParam);
-        dao.delete(deleteEmployeeId);
+//        dao.delete(deleteEmployeeId);
+        employeeRepositoryDao.delete(deleteEmployeeId);
     }
 
     public Employee readEmployeeById(String employeeIdString) {
         BigInteger employeeIdInt = new BigInteger(employeeIdString);
-        Employee employee = dao.readById(employeeIdInt);
+//        Employee employee = dao.readById(employeeIdInt);
+        Employee employee = employeeRepositoryDao.readById(employeeIdInt);
         Blob photo = employee.getPhoto();
         try (InputStream binaryStream = photo.getBinaryStream(1, photo.length())) {
             ImageIO.write(ImageIO.read(binaryStream), "JPG", new File("src/main/webapp/images/employeePhoto.jpg"));
@@ -83,7 +124,8 @@ public class EmployeeService {
     }
 
     public Employee readEmployeeById(BigInteger employeeIdBigInteger) {
-        Employee employee = dao.readById(employeeIdBigInteger);
+//        Employee employee = dao.readById(employeeIdBigInteger);
+        Employee employee = employeeRepositoryDao.readById(employeeIdBigInteger);
         Blob photo = employee.getPhoto();
         try (InputStream binaryStream = photo.getBinaryStream(1, photo.length())) {
             ImageIO.write(ImageIO.read(binaryStream), "JPG", new File("src/main/webapp/images/employeePhoto.jpg"));
@@ -94,7 +136,7 @@ public class EmployeeService {
     }
 
     public List<Employee> readAllEmployee() {
-        return dao.readAll();
+        return employeeRepositoryDao.readAll();
     }
 
     public List<Employee> readAllEmployeeByParameter(String selectEmployeeIdParam, String selectEmployeeFirstNameParam, String selectEmployeeSurnameParam,
@@ -153,14 +195,9 @@ public class EmployeeService {
         return hqlString;
     }
 
-    private void checkAllParameterOnException(String employeeFirstNameParam, String employeeSurnameParam, String employeeDateOfBornParam, String employeePositionParam) {
+    private void checkAllParameterOnException(String employeeFirstNameParam, String employeeSurnameParam, Date employeeDateOfBornParam, String employeePositionParam) {
         boolean flag = false;
         ArrayList<String> errorList = new ArrayList<>();
-        if (employeeFirstNameParam.isEmpty()) {
-            String errorMessage = "Employee first name can't be empty!!!";
-            errorList.add(errorMessage);
-            flag = true;
-        }
         if (employeeFirstNameParam.isEmpty()) {
             String errorMessage = "Employee first name can't be empty!!!";
             errorList.add(errorMessage);
@@ -171,7 +208,7 @@ public class EmployeeService {
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeeDateOfBornParam.isEmpty()) {
+        if (employeeDateOfBornParam.toString().isEmpty()) {
             String errorMessage = "Employee date of born can't be empty";
             errorList.add(errorMessage);
             flag = true;
@@ -186,7 +223,7 @@ public class EmployeeService {
         }
     }
 
-    private void checkAllParameterOnException(String employeeId, String employeeFirstNameParam, String employeeSurnameParam, String employeeDateOfBornParam, String employeePositionParam) {
+    private void checkAllParameterOnException(String employeeId, String employeeFirstNameParam, String employeeSurnameParam, Date employeeDateOfBornParam, String employeePositionParam) {
         boolean flag = false;
         ArrayList<String> errorList = new ArrayList<>();
         if (employeeId.isEmpty()) {
@@ -204,7 +241,7 @@ public class EmployeeService {
             errorList.add(errorMessage);
             flag = true;
         }
-        if (employeeDateOfBornParam.isEmpty()) {
+        if (employeeDateOfBornParam.toString().isEmpty()) {
             String errorMessage = "Employee date of born can't be empty";
             errorList.add(errorMessage);
             flag = true;

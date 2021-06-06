@@ -2,7 +2,7 @@ package my.project.exceptions;
 
 import java.util.List;
 
-public class QAEngineerWebException extends RuntimeException{
+public class QAEngineerWebException extends RuntimeException {
     private List<String> errorList;
 
     public QAEngineerWebException() {

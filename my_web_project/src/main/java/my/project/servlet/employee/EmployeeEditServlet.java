@@ -3,6 +3,7 @@ package my.project.servlet.employee;
 import my.project.entity.Employee;
 import my.project.exceptions.EmployeeWebException;
 import my.project.service.entity.EmployeeService;
+import my.project.service.entity.StringToSqlDate;
 import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -49,7 +51,6 @@ public class EmployeeEditServlet extends HttpServlet {
         String updateEmployeeSurnameParam = req.getParameter("updateEmployeeSurnameParam");
         String updateEmployeeDateOfBornParam = req.getParameter("updateEmployeeDateOfBornParam");
         String updateEmployeePositionParam = req.getParameter("updateEmployeePositionParam");
-        String updateAddressIdFkParam = req.getParameter("updateAddressIdFkParam");
 
         Blob imageBlob = null;
         Part image = req.getPart("image");
@@ -67,7 +68,7 @@ public class EmployeeEditServlet extends HttpServlet {
         }
 
         try {
-            new EmployeeService().updateEmployeeById(updateEditEmployeeIdParam, imageBlob, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, updateEmployeeDateOfBornParam, updateEmployeePositionParam);
+            new EmployeeService().updateEmployeeById(updateEditEmployeeIdParam, imageBlob, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, new StringToSqlDate().parse(updateEmployeeDateOfBornParam), updateEmployeePositionParam);
             req.getRequestDispatcher("/employees").forward(req, resp);
         } catch (EmployeeWebException e) {
             List<String> errorList = e.getErrorList();

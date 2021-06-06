@@ -2,7 +2,6 @@ package my.project.entity;
 
 import javax.persistence.*;
 import java.math.BigInteger;
-import java.util.Objects;
 
 @Entity
 @Table(name = "employee_address_communication")

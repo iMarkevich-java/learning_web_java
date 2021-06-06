@@ -1,6 +1,7 @@
 package my.project.entity;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.util.Objects;
 
 @Entity
@@ -10,7 +11,7 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
-    private int companyId;
+    private BigInteger companyId;
 
     @Column(name = "company_name")
     private String companyName;
@@ -26,17 +27,17 @@ public class Company {
         this.companyActivity = companyActivity;
     }
 
-    public Company(int companyId, String companyName, String companyActivity) {
+    public Company(BigInteger companyId, String companyName, String companyActivity) {
         this.companyId = companyId;
         this.companyName = companyName;
         this.companyActivity = companyActivity;
     }
 
-    public int getCompanyId() {
+    public BigInteger getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(int companyId) {
+    public void setCompanyId(BigInteger companyId) {
         this.companyId = companyId;
     }
 
@@ -56,7 +57,18 @@ public class Company {
         this.companyName = companyName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Company company = (Company) o;
+        return companyId.equals(company.companyId) && companyName.equals(company.companyName) && companyActivity.equals(company.companyActivity);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(companyId, companyName, companyActivity);
+    }
 
     @Override
     public String toString() {
@@ -65,18 +77,5 @@ public class Company {
                 ", companyName='" + companyName + '\'' +
                 ", companyActivity='" + companyActivity + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Company company = (Company) o;
-        return companyId == company.companyId && companyName.equals(company.companyName) && companyActivity.equals(company.companyActivity);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(companyId, companyName, companyActivity);
     }
 }

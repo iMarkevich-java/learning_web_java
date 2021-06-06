@@ -39,11 +39,13 @@ public class AddressEditServlet extends HttpServlet {
         String updateAddressStreetParam = req.getParameter("updateAddressStreetParam");
         String updateAddressHouseParam = req.getParameter("updateAddressHouseParam");
         String updateAddressFlatParam = req.getParameter("updateAddressFlatParam");
-        String updateEmployeeIdFkParam = req.getParameter("updateEmployeeIdFkParam");
+
 
         try {
+            int house = Integer.parseInt(updateAddressHouseParam);
+            int flat = Integer.parseInt(updateAddressFlatParam);
             new AddressService().updateAddressById(updateAddressIdParam, updateAddressCountryParam, updateAddressRegionParam, updateAddressLocalityParam,
-                    updateAddressCityParam, updateAddressStreetParam, updateAddressHouseParam, updateAddressFlatParam);
+                    updateAddressCityParam, updateAddressStreetParam, house, flat);
             req.getRequestDispatcher("/addresses").forward(req, resp);
         } catch (AddressWebException e) {
             List<String> errorList = e.getErrorList();
