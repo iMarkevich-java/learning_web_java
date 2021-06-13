@@ -32,7 +32,7 @@
                         		            </div>
                         		            <label>Фото:</label>
                                             <div class="row">
-                                                <form:input type="file" path="updateEmployeePhotoParam" name="photo" id="photo" accept="image/jpg" multiple="multiple"/>
+                                                <form:input type="file" path="updateEmployeePhotoParam" accept="image/jpg" multiple="multiple"/>
                                             </div>
                                             <label>Имя:</label>
                                             <div class="row">

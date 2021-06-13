@@ -39,7 +39,7 @@ public class UpdateEmployeePositionCommunicationService {
 
     }
 
-    public void updateEntityCommunication(String employeeIdFkParam, String employeePositionParam, String departmentParam, String experienceParam) {
+    public void updateEntityCommunication(String employeeIdFkParam, String employeePositionParam, String departmentParam, int experienceParam) {
         BigInteger employeeIdFk = new BigInteger(employeeIdFkParam);
         if (employeePositionParam.equals(Positions.MANAGER.getPosition())) {
             Employee employee = employeeService.readEmployeeById(employeeIdFkParam);

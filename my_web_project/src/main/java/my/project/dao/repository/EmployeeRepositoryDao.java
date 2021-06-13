@@ -19,9 +19,11 @@ public class EmployeeRepositoryDao implements Dao<Employee> {
     public void create(Employee employee) {
         employeeRepository.save(employee);
     }
+
     @Override
     public void update(Employee employee) {
-        employeeRepository.save(employee);
+        employeeRepository.updateEmployee(employee.getEmployeeId(), employee.getPhoto(), employee.getEmployeeFirstName(),
+                employee.getEmployeeSurname(), employee.getEmployeeDateOfBorn(), employee.getEmployeePosition());
     }
 
     @Override

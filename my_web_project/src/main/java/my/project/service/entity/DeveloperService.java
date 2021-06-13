@@ -4,6 +4,7 @@ import my.project.dao.hibernate.entity.DeveloperHibernateDao;
 import my.project.dao.repository.DeveloperRepositoryDao;
 import my.project.entity.Developer;
 import my.project.exceptions.DeveloperWebException;
+import my.project.service.communication.EmployeeDeveloperCommunicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,10 @@ import java.util.List;
 public class DeveloperService {
 
     @Autowired
-    DeveloperRepositoryDao developerRepositoryDao;
+    private DeveloperRepositoryDao developerRepositoryDao;
+
+    @Autowired
+    private EmployeeDeveloperCommunicationService employeeDeveloperCommunicationService;
 
     private final DeveloperHibernateDao dao;
 
@@ -23,27 +27,36 @@ public class DeveloperService {
         dao = new DeveloperHibernateDao();
     }
 
-    public BigInteger createDeveloper(String developerDepartmentParam, String developerExperienceParam) {
+    public BigInteger createDeveloper(String developerDepartmentParam, int developerExperienceParam) {
         checkAllParameterOnException(developerDepartmentParam, developerExperienceParam);
-        int experience = Integer.parseInt(developerExperienceParam);
-        Developer developer = new Developer(developerDepartmentParam, experience);
+        Developer developer = new Developer(developerDepartmentParam, developerExperienceParam);
 //        dao.create(developer);
         developerRepositoryDao.create(developer);
         return developer.getDeveloperId();
     }
 
-    public void updateDeveloperById(String updateDeveloperIdParam, String updateDeveloperDepartmentParam, String updateDeveloperExperienceParam) {
+    public void updateDeveloperById(String updateDeveloperIdParam, String updateDeveloperDepartmentParam, int updateDeveloperExperienceParam) {
         checkAllParameterOnException(updateDeveloperIdParam, updateDeveloperDepartmentParam, updateDeveloperExperienceParam);
         BigInteger updateDeveloperId = new BigInteger(updateDeveloperIdParam);
-        int updateDeveloperExperience = Integer.parseInt(updateDeveloperExperienceParam);
-        Developer updateDeveloper = new Developer(updateDeveloperId, updateDeveloperDepartmentParam, updateDeveloperExperience);
+        Developer updateDeveloper = new Developer(updateDeveloperId, updateDeveloperDepartmentParam, updateDeveloperExperienceParam);
 //        dao.update(updateDeveloper);
         developerRepositoryDao.update(updateDeveloper);
+    }
+
+    public void updateDeveloper(Developer updateDeveloper) {
+        BigInteger employeeId = updateDeveloper.getEmployee().getEmployeeId();
+        BigInteger developerId = updateDeveloper.getDeveloperId();
+        developerRepositoryDao.update(updateDeveloper);
+        employeeDeveloperCommunicationService.updateCommunication(employeeId, developerId);
     }
 
     public void deleteDeveloperById(String deleteDeveloperIdParam) {
         BigInteger deleteDeveloperId = new BigInteger(deleteDeveloperIdParam);
 //        dao.delete(deleteClientId);
+        developerRepositoryDao.delete(deleteDeveloperId);
+    }
+
+    public void deleteDeveloperById(BigInteger deleteDeveloperId) {
         developerRepositoryDao.delete(deleteDeveloperId);
     }
 
@@ -58,7 +71,7 @@ public class DeveloperService {
         return developerRepositoryDao.readAll();
     }
 
-    private void checkAllParameterOnException(String developerDepartmentParam, String developerExperienceParam) {
+    private void checkAllParameterOnException(String developerDepartmentParam, int developerExperienceParam) {
         boolean flag = false;
         ArrayList<String> errorList = new ArrayList<>();
         if (developerDepartmentParam.isEmpty()) {
@@ -66,8 +79,8 @@ public class DeveloperService {
             errorList.add(errorMessage);
             flag = true;
         }
-        if (developerExperienceParam.isEmpty()) {
-            String errorMessage = "Developer experience can't be empty!!!";
+        if (developerExperienceParam < 0) {
+            String errorMessage = "Developer experience can't be < 0!!!";
             errorList.add(errorMessage);
             flag = true;
         }
@@ -76,7 +89,7 @@ public class DeveloperService {
         }
     }
 
-    private void checkAllParameterOnException(String developerIdParam, String developerDepartmentParam, String developerExperienceParam) {
+    private void checkAllParameterOnException(String developerIdParam, String developerDepartmentParam, int developerExperienceParam) {
         boolean flag = false;
         ArrayList<String> errorList = new ArrayList<>();
         if (developerIdParam.isEmpty()) {
@@ -89,13 +102,29 @@ public class DeveloperService {
             errorList.add(errorMessage);
             flag = true;
         }
-        if (developerExperienceParam.isEmpty()) {
-            String errorMessage = "Developer experience can't be empty!!!";
+        if (developerExperienceParam < 0) {
+            String errorMessage = "Developer experience can't be < 0!!!";
             errorList.add(errorMessage);
             flag = true;
         }
         if (flag) {
             throw new DeveloperWebException(errorList);
         }
+    }
+
+    public DeveloperRepositoryDao getDeveloperRepositoryDao() {
+        return developerRepositoryDao;
+    }
+
+    public void setDeveloperRepositoryDao(DeveloperRepositoryDao developerRepositoryDao) {
+        this.developerRepositoryDao = developerRepositoryDao;
+    }
+
+    public EmployeeDeveloperCommunicationService getEmployeeDeveloperCommunicationService() {
+        return employeeDeveloperCommunicationService;
+    }
+
+    public void setEmployeeDeveloperCommunicationService(EmployeeDeveloperCommunicationService employeeDeveloperCommunicationService) {
+        this.employeeDeveloperCommunicationService = employeeDeveloperCommunicationService;
     }
 }

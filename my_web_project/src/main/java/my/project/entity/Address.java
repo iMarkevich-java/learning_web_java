@@ -1,8 +1,11 @@
 package my.project.entity;
 
+import lombok.Builder;
+
 import javax.persistence.*;
 import java.math.BigInteger;
 
+@Builder
 @Entity
 @Table(name = "address")
 public class Address {
@@ -33,7 +36,7 @@ public class Address {
     @Column(name = "flat")
     private int flat;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "employee_address_communication", joinColumns = @JoinColumn(name = "address_id_fk"), inverseJoinColumns = @JoinColumn(name = "employee_id_fk"))
     private Employee employee;
 
@@ -59,6 +62,18 @@ public class Address {
         this.street = street;
         this.house = house;
         this.flat = flat;
+    }
+
+    public Address(BigInteger addressId, String country, String region, String locality, String city, String street, int house, int flat, Employee employee) {
+        this.addressId = addressId;
+        this.country = country;
+        this.region = region;
+        this.locality = locality;
+        this.city = city;
+        this.street = street;
+        this.house = house;
+        this.flat = flat;
+        this.employee = employee;
     }
 
     public BigInteger getAddressId() {

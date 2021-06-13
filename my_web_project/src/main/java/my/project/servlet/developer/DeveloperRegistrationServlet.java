@@ -25,7 +25,7 @@ public class DeveloperRegistrationServlet extends HttpServlet {
         String developerExperienceParam = req.getParameter("developerExperienceParam");
 
         try {
-            new DeveloperService().createDeveloper(developerDepartmentParam, developerExperienceParam);
+            new DeveloperService().createDeveloper(developerDepartmentParam, Integer.parseInt(developerExperienceParam));
             req.getRequestDispatcher("/developers").forward(req, resp);
         } catch (DeveloperWebException e) {
             e.printStackTrace();

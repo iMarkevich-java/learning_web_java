@@ -1,9 +1,12 @@
 package my.project.entity;
 
+import lombok.Builder;
+
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Objects;
 
+@Builder
 @Entity
 @Table(name = "developer")
 public class Developer {
@@ -19,7 +22,7 @@ public class Developer {
     @Column(name = "developer_experience")
     private int developerExperience;
 
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "employee_developer_communication", joinColumns = @JoinColumn(name = "developer_id_fk"), inverseJoinColumns = @JoinColumn(name = "employee_id_fk"))
     private Employee employee;
 
@@ -35,6 +38,13 @@ public class Developer {
         this.developerId = developerId;
         this.developerDepartment = developerDepartment;
         this.developerExperience = developerExperience;
+    }
+
+    public Developer(BigInteger developerId, String developerDepartment, int developerExperience, Employee employee) {
+        this.developerId = developerId;
+        this.developerDepartment = developerDepartment;
+        this.developerExperience = developerExperience;
+        this.employee = employee;
     }
 
     public BigInteger getDeveloperId() {

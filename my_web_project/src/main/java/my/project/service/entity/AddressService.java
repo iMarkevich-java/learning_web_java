@@ -5,7 +5,6 @@ import my.project.dao.repository.AddressRepositoryDao;
 import my.project.entity.Address;
 import my.project.exceptions.AddressWebException;
 import my.project.service.communication.EmployeeAddressCommunicationService;
-import my.project.service.communication.EmployeeQAEngineerCommunicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +16,10 @@ import java.util.List;
 public class AddressService {
 
     @Autowired
-    AddressRepositoryDao addressRepositoryDao;
+    private AddressRepositoryDao addressRepositoryDao;
 
     @Autowired
-    EmployeeAddressCommunicationService employeeAddressCommunicationService;
+    private EmployeeAddressCommunicationService employeeAddressCommunicationService;
 
     final private AddressHibernateDao dao;
 
@@ -45,6 +44,13 @@ public class AddressService {
 //        dao.update(updateAddress);
         addressRepositoryDao.update(updateAddress);
         employeeAddressCommunicationService.updateCommunication(employeeId, updateAddress.getAddressId());
+    }
+
+    public void updateAddress(Address updateAddress) {
+        BigInteger addressId = updateAddress.getAddressId();
+        BigInteger employeeId = addressRepositoryDao.readById(addressId).getEmployee().getEmployeeId();
+        addressRepositoryDao.update(updateAddress);
+//        employeeAddressCommunicationService.updateCommunication(employeeId, addressId);
     }
 
     public void deleteAddressById(String deleteAddressIdParam) {
@@ -173,5 +179,21 @@ public class AddressService {
         if (flag) {
             throw new AddressWebException(errorList);
         }
+    }
+
+    public AddressRepositoryDao getAddressRepositoryDao() {
+        return addressRepositoryDao;
+    }
+
+    public void setAddressRepositoryDao(AddressRepositoryDao addressRepositoryDao) {
+        this.addressRepositoryDao = addressRepositoryDao;
+    }
+
+    public EmployeeAddressCommunicationService getEmployeeAddressCommunicationService() {
+        return employeeAddressCommunicationService;
+    }
+
+    public void setEmployeeAddressCommunicationService(EmployeeAddressCommunicationService employeeAddressCommunicationService) {
+        this.employeeAddressCommunicationService = employeeAddressCommunicationService;
     }
 }

@@ -33,7 +33,7 @@ public class DeveloperEditServlet extends HttpServlet {
         String updateDeveloperExperienceParam = req.getParameter("updateDeveloperExperienceParam");
 
         try {
-            new DeveloperService().updateDeveloperById(updateDeveloperIdParam, updateDeveloperDepartmentParam, updateDeveloperExperienceParam);
+            new DeveloperService().updateDeveloperById(updateDeveloperIdParam, updateDeveloperDepartmentParam, Integer.parseInt(updateDeveloperExperienceParam));
             req.getRequestDispatcher("/developers").forward(req, resp);
         } catch (DeveloperWebException e) {
             e.printStackTrace();

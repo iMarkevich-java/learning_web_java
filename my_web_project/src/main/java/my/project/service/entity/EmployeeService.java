@@ -3,7 +3,6 @@ package my.project.service.entity;
 import my.project.dao.hibernate.entity.EmployeeHibernateDao;
 import my.project.dao.repository.EmployeeRepositoryDao;
 import my.project.entity.Employee;
-import my.project.entity.EmployeeAddressCommunication;
 import my.project.exceptions.EmployeeWebException;
 import my.project.service.communication.EmployeeAddressCommunicationService;
 import my.project.service.communication.EmployeeDeveloperCommunicationService;
@@ -31,19 +30,19 @@ import java.util.List;
 public class EmployeeService {
 
     @Autowired
-    EmployeeAddressCommunicationService employeeAddressCommunicationService;
+    private EmployeeAddressCommunicationService employeeAddressCommunicationService;
 
     @Autowired
-    EmployeeDeveloperCommunicationService employeeDeveloperCommunicationService;
+    private EmployeeDeveloperCommunicationService employeeDeveloperCommunicationService;
 
     @Autowired
-    EmployeeManagerCommunicationService employeeManagerCommunicationService;
+    private EmployeeManagerCommunicationService employeeManagerCommunicationService;
 
     @Autowired
-    EmployeeQAEngineerCommunicationService employeeQAEngineerCommunicationService;
+    private EmployeeQAEngineerCommunicationService employeeQAEngineerCommunicationService;
 
     @Autowired
-    EmployeeRepositoryDao employeeRepositoryDao;
+    private EmployeeRepositoryDao employeeRepositoryDao;
 
     final private EmployeeHibernateDao dao;
 
@@ -70,6 +69,30 @@ public class EmployeeService {
         return employee.getEmployeeId();
     }
 
+    public void updateEmployee(Employee updateEmployee) {
+//        BigInteger employeeId = updateEmployee.getEmployeeId();
+//        Employee employee = employeeRepositoryDao.readById(employeeId);
+//        BigInteger addressId = employee.getAddress().getAddressId();
+//        if (employee.getManager() != null) {
+//            BigInteger managerId = employee.getManager().getManagerId();
+            employeeRepositoryDao.update(updateEmployee);
+//            employeeAddressCommunicationService.updateCommunication(employeeId, addressId);
+//            employeeManagerCommunicationService.updateCommunication(employeeId, managerId);
+//        }
+//        if (employee.getDeveloper() != null) {
+//            BigInteger developerId = employee.getDeveloper().getDeveloperId();
+//            employeeRepositoryDao.update(updateEmployee);
+//            employeeAddressCommunicationService.updateCommunication(employeeId, addressId);
+//            employeeDeveloperCommunicationService.updateCommunication(employeeId, developerId);
+//        }
+//        if (employee.getQaEngineer() != null) {
+//            BigInteger getqAEngineerId = employee.getQaEngineer().getqAEngineerId();
+//            employeeRepositoryDao.update(updateEmployee);
+//            employeeAddressCommunicationService.updateCommunication(employeeId, addressId);
+//            employeeQAEngineerCommunicationService.updateCommunication(employeeId, getqAEngineerId);
+//        }
+    }
+
     public void updateEmployeeById(String updateEmployeeIdParam, Blob updateEmployeePhotoParam, String updateEmployeeFirstNameParam, String updateEmployeeSurnameParam, Date updateEmployeeDateOfBornParam, String updateEmployeePositionParam) {
         checkAllParameterOnException(updateEmployeeIdParam, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, updateEmployeeDateOfBornParam, updateEmployeePositionParam);
         BigInteger employeeId = new BigInteger(updateEmployeeIdParam);
@@ -84,19 +107,19 @@ public class EmployeeService {
         Employee employee = readEmployeeById(updateEmployeeIdParam);
         BigInteger addressId = employee.getAddress().getAddressId();
         Employee updateEmployee = new Employee(new BigInteger(updateEmployeeIdParam), employeePhotoBlob, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, updateEmployeeDateOfBornParam, updateEmployeePositionParam);
-        if(updateEmployee.getManager() != null){
+        if (updateEmployee.getManager() != null) {
             BigInteger managerId = employee.getManager().getManagerId();
             employeeRepositoryDao.update(updateEmployee);
             employeeAddressCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), addressId);
             employeeManagerCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), managerId);
         }
-        if(updateEmployee.getDeveloper() != null){
+        if (updateEmployee.getDeveloper() != null) {
             BigInteger developerId = employee.getDeveloper().getDeveloperId();
             employeeRepositoryDao.update(updateEmployee);
             employeeAddressCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), addressId);
             employeeDeveloperCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), developerId);
         }
-        if(updateEmployee.getQaEngineer() != null){
+        if (updateEmployee.getQaEngineer() != null) {
             BigInteger qaEngineerId = employee.getQaEngineer().getqAEngineerId();
             employeeRepositoryDao.update(updateEmployee);
             employeeAddressCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), addressId);
@@ -254,5 +277,49 @@ public class EmployeeService {
         if (flag) {
             throw new EmployeeWebException(errorList);
         }
+    }
+
+    public EmployeeAddressCommunicationService getEmployeeAddressCommunicationService() {
+        return employeeAddressCommunicationService;
+    }
+
+    public void setEmployeeAddressCommunicationService(EmployeeAddressCommunicationService employeeAddressCommunicationService) {
+        this.employeeAddressCommunicationService = employeeAddressCommunicationService;
+    }
+
+    public EmployeeDeveloperCommunicationService getEmployeeDeveloperCommunicationService() {
+        return employeeDeveloperCommunicationService;
+    }
+
+    public void setEmployeeDeveloperCommunicationService(EmployeeDeveloperCommunicationService employeeDeveloperCommunicationService) {
+        this.employeeDeveloperCommunicationService = employeeDeveloperCommunicationService;
+    }
+
+    public EmployeeManagerCommunicationService getEmployeeManagerCommunicationService() {
+        return employeeManagerCommunicationService;
+    }
+
+    public void setEmployeeManagerCommunicationService(EmployeeManagerCommunicationService employeeManagerCommunicationService) {
+        this.employeeManagerCommunicationService = employeeManagerCommunicationService;
+    }
+
+    public EmployeeQAEngineerCommunicationService getEmployeeQAEngineerCommunicationService() {
+        return employeeQAEngineerCommunicationService;
+    }
+
+    public void setEmployeeQAEngineerCommunicationService(EmployeeQAEngineerCommunicationService employeeQAEngineerCommunicationService) {
+        this.employeeQAEngineerCommunicationService = employeeQAEngineerCommunicationService;
+    }
+
+    public EmployeeRepositoryDao getEmployeeRepositoryDao() {
+        return employeeRepositoryDao;
+    }
+
+    public void setEmployeeRepositoryDao(EmployeeRepositoryDao employeeRepositoryDao) {
+        this.employeeRepositoryDao = employeeRepositoryDao;
+    }
+
+    public EmployeeHibernateDao getDao() {
+        return dao;
     }
 }

@@ -2,6 +2,7 @@ package my.project.service.entity;
 
 import my.project.dao.hibernate.entity.ManagerHibernateDao;
 import my.project.dao.repository.ManagerRepositoryDao;
+import my.project.entity.Employee;
 import my.project.entity.Manager;
 import my.project.exceptions.ManagerWebException;
 import my.project.service.communication.EmployeeManagerCommunicationService;
@@ -16,10 +17,10 @@ import java.util.List;
 public class ManagerService {
 
     @Autowired
-    EmployeeManagerCommunicationService employeeManagerCommunicationService;
+    private EmployeeManagerCommunicationService employeeManagerCommunicationService;
 
     @Autowired
-    ManagerRepositoryDao managerRepositoryDao;
+    private ManagerRepositoryDao managerRepositoryDao;
 
     private final ManagerHibernateDao dao;
 
@@ -27,29 +28,32 @@ public class ManagerService {
         dao = new ManagerHibernateDao();
     }
 
-    public BigInteger createManager(String managerDepartmentParam, String managerExperienceParam) {
+    public BigInteger createManager(String managerDepartmentParam, int managerExperienceParam) {
         checkAllParameterOnException(managerDepartmentParam, managerExperienceParam);
-        int managerExperience = Integer.parseInt(managerExperienceParam);
-        Manager manager = new Manager(managerDepartmentParam, managerExperience);
+        Manager manager = new Manager(managerDepartmentParam, managerExperienceParam);
 //        dao.create(manager);
         managerRepositoryDao.create(manager);
         return manager.getManagerId();
     }
 
-    public void updateManagerById(String updateManagerIdParam, String updateManagerDepartmentParam, String updateManagerExperienceParam) {
+    public void updateManagerById(String updateManagerIdParam, String updateManagerDepartmentParam, int updateManagerExperienceParam) {
         checkAllParameterOnException(updateManagerIdParam, updateManagerDepartmentParam, updateManagerExperienceParam);
-        int updateManagerExperience = Integer.parseInt(updateManagerExperienceParam);
         BigInteger employeeId = readManagerById(updateManagerIdParam).getEmployee().getEmployeeId();
-        Manager manager = new Manager(new BigInteger(updateManagerIdParam), updateManagerDepartmentParam, updateManagerExperience);
+        Manager manager = new Manager(new BigInteger(updateManagerIdParam), updateManagerDepartmentParam, updateManagerExperienceParam);
 //        dao.update(manager);
         managerRepositoryDao.update(manager);
         employeeManagerCommunicationService.updateCommunication(employeeId, manager.getManagerId());
     }
 
-    public void deleteManagerById(String deleteManagerIdParam) {
-        BigInteger deleteManagerId = new BigInteger(deleteManagerIdParam);
-//        dao.delete(deleteManagerId);
-        managerRepositoryDao.delete(deleteManagerId);
+    public void updateManager(Manager updateManager) {
+        BigInteger employeeId = updateManager.getEmployee().getEmployeeId();
+        BigInteger managerId = updateManager.getManagerId();
+        managerRepositoryDao.update(updateManager);
+//        employeeManagerCommunicationService.updateCommunication(employeeId, managerId);
+    }
+
+    public void deleteManagerById(BigInteger deleteManagerIdParam) {
+        managerRepositoryDao.delete(deleteManagerIdParam);
     }
 
     public Manager readManagerById(String managerIdParam) {
@@ -63,7 +67,7 @@ public class ManagerService {
         return managerRepositoryDao.readAll();
     }
 
-    private void checkAllParameterOnException(String managerDepartmentParam, String managerExperienceParam) {
+    private void checkAllParameterOnException(String managerDepartmentParam, int managerExperienceParam) {
         boolean flag = false;
         ArrayList<String> errorList = new ArrayList<>();
         if (managerDepartmentParam.isEmpty()) {
@@ -71,8 +75,8 @@ public class ManagerService {
             errorList.add(errorMessage);
             flag = true;
         }
-        if (managerExperienceParam.isEmpty()) {
-            String errorMessage = "Manager experience can't be empty!!!";
+        if (managerExperienceParam < 0) {
+            String errorMessage = "Manager experience can't be < 0!!!";
             errorList.add(errorMessage);
             flag = true;
         }
@@ -81,7 +85,7 @@ public class ManagerService {
         }
     }
 
-    private void checkAllParameterOnException(String managerIdParam, String managerDepartmentParam, String managerExperienceParam) {
+    private void checkAllParameterOnException(String managerIdParam, String managerDepartmentParam, int managerExperienceParam) {
         boolean flag = false;
         ArrayList<String> errorList = new ArrayList<>();
         if (managerIdParam.isEmpty()) {
@@ -94,13 +98,29 @@ public class ManagerService {
             errorList.add(errorMessage);
             flag = true;
         }
-        if (managerExperienceParam.isEmpty()) {
-            String errorMessage = "Manager experience can't be empty!!!";
+        if (managerExperienceParam < 0) {
+            String errorMessage = "Manager experience can't be < 0!!!";
             errorList.add(errorMessage);
             flag = true;
         }
         if (flag) {
             throw new ManagerWebException(errorList);
         }
+    }
+
+    public EmployeeManagerCommunicationService getEmployeeManagerCommunicationService() {
+        return employeeManagerCommunicationService;
+    }
+
+    public void setEmployeeManagerCommunicationService(EmployeeManagerCommunicationService employeeManagerCommunicationService) {
+        this.employeeManagerCommunicationService = employeeManagerCommunicationService;
+    }
+
+    public ManagerRepositoryDao getManagerRepositoryDao() {
+        return managerRepositoryDao;
+    }
+
+    public void setManagerRepositoryDao(ManagerRepositoryDao managerRepositoryDao) {
+        this.managerRepositoryDao = managerRepositoryDao;
     }
 }

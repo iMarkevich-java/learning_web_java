@@ -33,7 +33,7 @@ public class CreateEmployeePositionCommunicationService {
 
     }
 
-    public void createEntityCommunication(BigInteger employeeIdFkParam, String employeePositionParam, String departmentParam, String experienceParam) {
+    public void createEntityCommunication(BigInteger employeeIdFkParam, String employeePositionParam, String departmentParam, int experienceParam) {
         if (employeePositionParam.equals(Positions.MANAGER.getPosition())) {
             BigInteger managerIdFk = managerService.createManager(departmentParam, experienceParam);
             employeeManagerCommunicationService.createCommunication(employeeIdFkParam, managerIdFk);

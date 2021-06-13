@@ -1,49 +1,15 @@
 package my.project.dto;
 
 import my.project.entity.*;
-import my.project.exceptions.EmployeeWebException;
-import my.project.service.communication.EmployeeAddressCommunicationService;
-import my.project.service.communication.EmployeeDeveloperCommunicationService;
-import my.project.service.communication.EmployeeManagerCommunicationService;
-import my.project.service.communication.EmployeeQAEngineerCommunicationService;
-import my.project.service.entity.*;
-import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.sql.rowset.serial.SerialBlob;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
 import java.sql.Blob;
 import java.sql.Date;
-import java.sql.SQLException;
-import java.util.List;
 
 @Component
 public class WebParamToEntityDataBase {
-
-    @Autowired
-    EmployeeService employeeService;
-    @Autowired
-    AddressService addressService;
-    @Autowired
-    ManagerService managerService;
-    @Autowired
-    DeveloperService developerService;
-    @Autowired
-    QAEngineerService qaEngineerService;
-    @Autowired
-    EmployeeAddressCommunicationService employeeAddressCommunicationService;
-    @Autowired
-    EmployeeManagerCommunicationService employeeManagerCommunicationService;
-    @Autowired
-    EmployeeDeveloperCommunicationService employeeDeveloperCommunicationService;
-    @Autowired
-    EmployeeQAEngineerCommunicationService employeeQAEngineerCommunicationService;
-
 
     private MultipartFile updateEmployeePhotoParam;
     private String updateEmployeeIdParam;
@@ -52,142 +18,71 @@ public class WebParamToEntityDataBase {
     private Date updateEmployeeDateOfBornParam;
     private String updateEmployeePositionParam;
     private String updateDepartmentParam;
-    private String updateExperienceParam;
+    private int updateExperienceParam;
     private String updateAddressIdParam;
     private String updateAddressCountryParam;
     private String updateAddressRegionParam;
     private String updateAddressLocalityParam;
     private String updateAddressCityParam;
     private String updateAddressStreetParam;
-    private String updateAddressHouseParam;
-    private String updateAddressFlatParam;
-
-    private Employee employee;
-    private Address address;
-    private Manager manager;
-    private Developer developer;
-    private QaEngineer qaEngineer;
+    private int updateAddressHouseParam;
+    private int updateAddressFlatParam;
 
     public WebParamToEntityDataBase() {
     }
 
-    public void update() {
-//        Blob employeePhotoBlob = convertMultiPartFileToBlob(updateEmployeePhotoParam, "src/main/webapp/images/employeePhoto.jpg");
-//        Employee employee = employeeService.readEmployeeById(updateEmployeeIdParam);
-//        BigInteger addressId = employee.getAddress().getAddressId();
-//        Employee updateEmployee = new Employee(new BigInteger(updateEmployeeIdParam), employeePhotoBlob, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, updateEmployeeDateOfBornParam, updateEmployeePositionParam);
-//        if(Employee){
-//            BigInteger managerId = employee.getManager().getManagerId();
-//            qaEngineerService.updateQAEngineerById(updateEmployee);
-//            employeeAddressCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), addressId);
-//            employeeManagerCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), managerId);
-//        }
-//        if(updateEmployee.getDeveloper() != null){
-//            BigInteger developerId = employee.getDeveloper().getDeveloperId();
-//            employeeService.updateEmployeeById(updateEmployee);
-//            employeeAddressCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), addressId);
-//            employeeDeveloperCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), developerId);
-//        }
-//        if(updateEmployee.getQaEngineer() != null){
-//            BigInteger qaEngineerId = employee.getQaEngineer().getqAEngineerId();
-//            employeeService.updateEmployeeById(updateEmployee);
-//            employeeAddressCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), addressId);
-//            employeeQAEngineerCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), qaEngineerId);
-//        }
+    public Employee readUpdateEmployee() {
+        Blob employeePhotoBlob = new ConvertMultiPartFileToBlob().convert(updateEmployeePhotoParam);
+        BigInteger updateEmployeeIdBigInteger = new BigInteger(updateEmployeeIdParam);
+        return Employee
+                .builder()
+                .employeeId(updateEmployeeIdBigInteger)
+                .photo(employeePhotoBlob)
+                .employeeFirstName(updateEmployeeFirstNameParam)
+                .employeeSurname(updateEmployeeSurnameParam)
+                .employeeDateOfBorn(updateEmployeeDateOfBornParam)
+                .employeePosition(updateEmployeePositionParam)
+                .employeePosition(updateEmployeePositionParam)
+                .build();
     }
 
-    public Blob convertMultiPartFileToBlob(MultipartFile photoParam, String pathEmployeeImage) {
-        Blob photoBlob = null;
-        if (!(photoParam.isEmpty())) {
-            try (InputStream inputStreamImage = photoParam.getInputStream()) {
-                byte[] imageByte = IOUtils.toByteArray(inputStreamImage);
-                photoBlob = new SerialBlob(imageByte);
-            } catch (IOException | SQLException e) {
-                List<String> errorList = new EmployeeWebException().getErrorList();
-                errorList.add(e.getMessage());
-                new EmployeeWebException().setErrorList(errorList);
-            }
-        } else {
-            try (FileInputStream fileInputStream = new FileInputStream(pathEmployeeImage)) {
-                byte[] imageByte = IOUtils.toByteArray(fileInputStream);
-                photoBlob = new SerialBlob(imageByte);
-            } catch (SQLException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return photoBlob;
+    public Address readUpdateAddress() {
+        BigInteger updateAddressIdBigInteger = new BigInteger(updateAddressIdParam);
+        return Address
+                .builder()
+                .addressId(updateAddressIdBigInteger)
+                .country(updateAddressCountryParam)
+                .region(updateAddressRegionParam)
+                .locality(updateAddressLocalityParam)
+                .city(updateAddressCityParam)
+                .street(updateAddressStreetParam)
+                .house(updateAddressHouseParam)
+                .flat(updateAddressFlatParam)
+                .build();
     }
 
-    public EmployeeService getEmployeeService() {
-        return employeeService;
+    public Manager readUpdateManager() {
+        return Manager
+                .builder()
+                .managerDepartment(updateDepartmentParam)
+                .managerExperience(updateExperienceParam)
+                .build();
     }
 
-    public void setEmployeeService(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public QaEngineer readUpdateQaEngineer() {
+        return QaEngineer
+                .builder()
+                .qaEngineerDepartment(updateDepartmentParam)
+                .qaEngineerExperience(updateExperienceParam)
+                .build();
     }
 
-    public AddressService getAddressService() {
-        return addressService;
-    }
-
-    public void setAddressService(AddressService addressService) {
-        this.addressService = addressService;
-    }
-
-    public ManagerService getManagerService() {
-        return managerService;
-    }
-
-    public void setManagerService(ManagerService managerService) {
-        this.managerService = managerService;
-    }
-
-    public DeveloperService getDeveloperService() {
-        return developerService;
-    }
-
-    public void setDeveloperService(DeveloperService developerService) {
-        this.developerService = developerService;
-    }
-
-    public QAEngineerService getQaEngineerService() {
-        return qaEngineerService;
-    }
-
-    public void setQaEngineerService(QAEngineerService qaEngineerService) {
-        this.qaEngineerService = qaEngineerService;
-    }
-
-    public EmployeeAddressCommunicationService getEmployeeAddressCommunicationService() {
-        return employeeAddressCommunicationService;
-    }
-
-    public void setEmployeeAddressCommunicationService(EmployeeAddressCommunicationService employeeAddressCommunicationService) {
-        this.employeeAddressCommunicationService = employeeAddressCommunicationService;
-    }
-
-    public EmployeeManagerCommunicationService getEmployeeManagerCommunicationService() {
-        return employeeManagerCommunicationService;
-    }
-
-    public void setEmployeeManagerCommunicationService(EmployeeManagerCommunicationService employeeManagerCommunicationService) {
-        this.employeeManagerCommunicationService = employeeManagerCommunicationService;
-    }
-
-    public EmployeeDeveloperCommunicationService getEmployeeDeveloperCommunicationService() {
-        return employeeDeveloperCommunicationService;
-    }
-
-    public void setEmployeeDeveloperCommunicationService(EmployeeDeveloperCommunicationService employeeDeveloperCommunicationService) {
-        this.employeeDeveloperCommunicationService = employeeDeveloperCommunicationService;
-    }
-
-    public EmployeeQAEngineerCommunicationService getEmployeeQAEngineerCommunicationService() {
-        return employeeQAEngineerCommunicationService;
-    }
-
-    public void setEmployeeQAEngineerCommunicationService(EmployeeQAEngineerCommunicationService employeeQAEngineerCommunicationService) {
-        this.employeeQAEngineerCommunicationService = employeeQAEngineerCommunicationService;
+    public Developer readUpdateDeveloper() {
+        return Developer
+                .builder()
+                .developerDepartment(updateDepartmentParam)
+                .developerExperience(updateExperienceParam)
+                .build();
     }
 
     public MultipartFile getUpdateEmployeePhotoParam() {
@@ -246,11 +141,11 @@ public class WebParamToEntityDataBase {
         this.updateDepartmentParam = updateDepartmentParam;
     }
 
-    public String getUpdateExperienceParam() {
+    public int getUpdateExperienceParam() {
         return updateExperienceParam;
     }
 
-    public void setUpdateExperienceParam(String updateExperienceParam) {
+    public void setUpdateExperienceParam(int updateExperienceParam) {
         this.updateExperienceParam = updateExperienceParam;
     }
 
@@ -302,59 +197,19 @@ public class WebParamToEntityDataBase {
         this.updateAddressStreetParam = updateAddressStreetParam;
     }
 
-    public String getUpdateAddressHouseParam() {
+    public int getUpdateAddressHouseParam() {
         return updateAddressHouseParam;
     }
 
-    public void setUpdateAddressHouseParam(String updateAddressHouseParam) {
+    public void setUpdateAddressHouseParam(int updateAddressHouseParam) {
         this.updateAddressHouseParam = updateAddressHouseParam;
     }
 
-    public String getUpdateAddressFlatParam() {
+    public int getUpdateAddressFlatParam() {
         return updateAddressFlatParam;
     }
 
-    public void setUpdateAddressFlatParam(String updateAddressFlatParam) {
+    public void setUpdateAddressFlatParam(int updateAddressFlatParam) {
         this.updateAddressFlatParam = updateAddressFlatParam;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public Manager getManager() {
-        return manager;
-    }
-
-    public void setManager(Manager manager) {
-        this.manager = manager;
-    }
-
-    public Developer getDeveloper() {
-        return developer;
-    }
-
-    public void setDeveloper(Developer developer) {
-        this.developer = developer;
-    }
-
-    public QaEngineer getQaEngineer() {
-        return qaEngineer;
-    }
-
-    public void setQaEngineer(QaEngineer qaEngineer) {
-        this.qaEngineer = qaEngineer;
     }
 }

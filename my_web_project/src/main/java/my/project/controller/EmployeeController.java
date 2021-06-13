@@ -1,10 +1,11 @@
 package my.project.controller;
 
+import my.project.dto.UpdateEntityDataBase;
 import my.project.dto.WebParamToEntityDataBase;
 import my.project.entity.Employee;
 import my.project.exceptions.EmployeeWebException;
-import my.project.service.communication.EmployeeAddressCommunicationService;
 import my.project.service.communication.CreateEmployeePositionCommunicationService;
+import my.project.service.communication.EmployeeAddressCommunicationService;
 import my.project.service.communication.UpdateEmployeePositionCommunicationService;
 import my.project.service.entity.AddressService;
 import my.project.service.entity.EmployeeService;
@@ -25,19 +26,22 @@ import java.util.List;
 public class EmployeeController {
 
     @Autowired
-    EmployeeService employeeService;
+    private EmployeeService employeeService;
 
     @Autowired
-    AddressService addressService;
+    private AddressService addressService;
 
     @Autowired
-    EmployeeAddressCommunicationService employeeAddressCommunicationService;
+    private UpdateEntityDataBase updateEntityDataBase;
 
     @Autowired
-    CreateEmployeePositionCommunicationService createEmployeePositionCommunicationService;
+    private EmployeeAddressCommunicationService employeeAddressCommunicationService;
 
     @Autowired
-    UpdateEmployeePositionCommunicationService updateEmployeePositionCommunicationService;
+    private CreateEmployeePositionCommunicationService createEmployeePositionCommunicationService;
+
+    @Autowired
+    private UpdateEmployeePositionCommunicationService updateEmployeePositionCommunicationService;
 
     @GetMapping(value = "/list")
     public String methodReturnEmployeeListPage(Model model) {
@@ -64,7 +68,7 @@ public class EmployeeController {
                               @RequestParam(name = "employeeDateOfBornParam") Date employeeDateOfBornParam,
                               @RequestParam(name = "employeePositionParam") String employeePositionParam,
                               @RequestParam(name = "departmentParam") String departmentParam,
-                              @RequestParam(name = "experienceParam") String experienceParam,
+                              @RequestParam(name = "experienceParam") int experienceParam,
                               @RequestParam(name = "addressCountryParam") String addressCountryParam,
                               @RequestParam(name = "addressRegionParam") String addressRegionParam,
                               @RequestParam(name = "addressLocalityParam") String addressLocalityParam,
@@ -108,36 +112,14 @@ public class EmployeeController {
 
     @PostMapping("/edit")
     public String employeeEdit(@ModelAttribute("webParam") WebParamToEntityDataBase webParamToEntityDataBase,
-//                               @RequestParam(name = "updateEmployeeIdParam") String updateEmployeeIdParam,
-//                               @RequestParam(name = "updateEmployeeFirstNameParam") String updateEmployeeFirstNameParam,
-//                               @RequestParam(name = "updateEmployeeSurnameParam") String updateEmployeeSurnameParam,
-//                               @RequestParam(name = "updateEmployeeDateOfBornParam") Date updateEmployeeDateOfBornParam,
-//                               @RequestParam(name = "updateEmployeePositionParam") String updateEmployeePositionParam,
-//                               @RequestParam(name = "updateDepartmentParam") String updateDepartmentParam,
-//                               @RequestParam(name = "updateExperienceParam") String updateExperienceParam,
-//                               @RequestParam(name = "updateAddressIdParam") String updateAddressIdParam,
-//                               @RequestParam(name = "updateAddressCountryParam") String updateAddressCountryParam,
-//                               @RequestParam(name = "updateAddressRegionParam") String updateAddressRegionParam,
-//                               @RequestParam(name = "updateAddressLocalityParam") String updateAddressLocalityParam,
-//                               @RequestParam(name = "updateAddressCityParam") String updateAddressCityParam,
-//                               @RequestParam(name = "updateAddressStreetParam") String updateAddressStreetParam,
-//                               @RequestParam(name = "updateAddressHouseParam") int updateAddressHouseParam,
-//                               @RequestParam(name = "updateAddressFlatParam") int updateAddressFlatParam,
                                Model model) {
         try {
-            System.out.println();
-//            employeeService.updateEmployeeById(updateEmployeeIdParam, updateEmployeePhotoParam, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, updateEmployeeDateOfBornParam, updateEmployeePositionParam);
-//            addressService.updateAddressById(updateAddressIdParam, updateAddressCountryParam, updateAddressRegionParam, updateAddressLocalityParam, updateAddressCityParam, updateAddressStreetParam, updateAddressHouseParam, updateAddressFlatParam);
-//            updateEmployeePositionCommunicationService.updateEntityCommunication(updateEmployeeIdParam, updateEmployeePositionParam, updateDepartmentParam, updateExperienceParam);
+            updateEntityDataBase.update(webParamToEntityDataBase);
         } catch (EmployeeWebException e) {
-//            List<String> errorList = e.getErrorList();
-//            model.addAttribute("employeeIdParam", updateEmployeeIdParam);
-//            model.addAttribute("employeeFirstNameParam", updateEmployeeFirstNameParam);
-//            model.addAttribute("employeeSurnameParam", updateEmployeeSurnameParam);
-//            model.addAttribute("employeeDateOfBornParam", updateEmployeeDateOfBornParam);
-//            model.addAttribute("employeePositionParam", updateEmployeePositionParam);
-//            model.addAttribute("messageList", errorList);
-            return "employee/edit/index";
+            Employee employee = employeeService.readEmployeeById(webParamToEntityDataBase.getUpdateEmployeeIdParam());
+            model.addAttribute("employee", employee);
+            model.addAttribute("webParam", new WebParamToEntityDataBase());
+            return "/employee/edit/index";
         }
         return "redirect:/mvc/employee/list";
     }
@@ -169,5 +151,53 @@ public class EmployeeController {
         model.addAttribute("employeeDateOfBorn", selectEmployeeDateOfBornParam);
         model.addAttribute("employeePosition", selectEmployeePositionParam);
         return "/employee/employees/index";
+    }
+
+    public EmployeeService getEmployeeService() {
+        return employeeService;
+    }
+
+    public void setEmployeeService(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
+    public AddressService getAddressService() {
+        return addressService;
+    }
+
+    public void setAddressService(AddressService addressService) {
+        this.addressService = addressService;
+    }
+
+    public UpdateEntityDataBase getUpdateEntityDataBase() {
+        return updateEntityDataBase;
+    }
+
+    public void setUpdateEntityDataBase(UpdateEntityDataBase updateEntityDataBase) {
+        this.updateEntityDataBase = updateEntityDataBase;
+    }
+
+    public EmployeeAddressCommunicationService getEmployeeAddressCommunicationService() {
+        return employeeAddressCommunicationService;
+    }
+
+    public void setEmployeeAddressCommunicationService(EmployeeAddressCommunicationService employeeAddressCommunicationService) {
+        this.employeeAddressCommunicationService = employeeAddressCommunicationService;
+    }
+
+    public CreateEmployeePositionCommunicationService getCreateEmployeePositionCommunicationService() {
+        return createEmployeePositionCommunicationService;
+    }
+
+    public void setCreateEmployeePositionCommunicationService(CreateEmployeePositionCommunicationService createEmployeePositionCommunicationService) {
+        this.createEmployeePositionCommunicationService = createEmployeePositionCommunicationService;
+    }
+
+    public UpdateEmployeePositionCommunicationService getUpdateEmployeePositionCommunicationService() {
+        return updateEmployeePositionCommunicationService;
+    }
+
+    public void setUpdateEmployeePositionCommunicationService(UpdateEmployeePositionCommunicationService updateEmployeePositionCommunicationService) {
+        this.updateEmployeePositionCommunicationService = updateEmployeePositionCommunicationService;
     }
 }

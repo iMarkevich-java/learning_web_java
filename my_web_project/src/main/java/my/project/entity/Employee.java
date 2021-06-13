@@ -1,11 +1,14 @@
 package my.project.entity;
 
+import lombok.Builder;
+
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.sql.Blob;
 import java.sql.Date;
 import java.util.Objects;
 
+@Builder
 @Entity
 @Table(name = "employee")
 public class Employee {
@@ -30,19 +33,19 @@ public class Employee {
     @Column(name = "employee_position")
     private String employeePosition;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "employee_address_communication", joinColumns = @JoinColumn(name = "employee_id_fk"), inverseJoinColumns = @JoinColumn(name = "address_id_fk"))
     private Address address;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "employee_developer_communication", joinColumns = @JoinColumn(name = "employee_id_fk"), inverseJoinColumns = @JoinColumn(name = "developer_id_fk"))
     private Developer developer;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "employee_manager_communication", joinColumns = @JoinColumn(name = "employee_id_fk"), inverseJoinColumns = @JoinColumn(name = "manager_id_fk"))
     private Manager manager;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "employee_qa_engineer_communication", joinColumns = @JoinColumn(name = "employee_id_fk"), inverseJoinColumns = @JoinColumn(name = "qa_engineer_id_fk"))
     private QaEngineer qaEngineer;
 
@@ -64,6 +67,19 @@ public class Employee {
         this.employeeSurname = employeeSurname;
         this.employeeDateOfBorn = employeeDateOfBorn;
         this.employeePosition = employeePosition;
+    }
+
+    public Employee(BigInteger employeeId, Blob photo, String employeeFirstName, String employeeSurname, Date employeeDateOfBorn, String employeePosition, Address address, Developer developer, Manager manager, QaEngineer qaEngineer) {
+        this.employeeId = employeeId;
+        this.photo = photo;
+        this.employeeFirstName = employeeFirstName;
+        this.employeeSurname = employeeSurname;
+        this.employeeDateOfBorn = employeeDateOfBorn;
+        this.employeePosition = employeePosition;
+        this.address = address;
+        this.developer = developer;
+        this.manager = manager;
+        this.qaEngineer = qaEngineer;
     }
 
     public BigInteger getEmployeeId() {
