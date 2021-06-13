@@ -1,11 +1,14 @@
 package my.project.dto;
 
 import my.project.entity.Positions;
+import my.project.exceptions.AllEntityWebException;
+import my.project.exceptions.EmployeeWebException;
 import my.project.service.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Component
 public class CreateEntityDataBase {
@@ -26,17 +29,22 @@ public class CreateEntityDataBase {
     private QAEngineerService qaEngineerService;
 
     public void create(CreateWebParamToEntityDataBase createWebParamToEntityDataBase) {
-        BigInteger employeeId = employeeService.createEmployee(createWebParamToEntityDataBase.readCreateEmployee());
-        addressService.createAddress(createWebParamToEntityDataBase.readCreateAddress(), employeeId);
+        try {
+            BigInteger employeeId = employeeService.createEmployee(createWebParamToEntityDataBase.readCreateEmployee());
+            addressService.createAddress(createWebParamToEntityDataBase.readCreateAddress(), employeeId);
 
-        if (createWebParamToEntityDataBase.getEmployeePositionParam().equals(Positions.MANAGER.getPosition())) {
-            managerService.createManager(createWebParamToEntityDataBase.readCreateManager(), employeeId);
-        }
-        if (createWebParamToEntityDataBase.getEmployeePositionParam().equals(Positions.DEVELOPER.getPosition())) {
-            developerService.createDeveloper(createWebParamToEntityDataBase.readCreateDeveloper(), employeeId);
-        }
-        if (createWebParamToEntityDataBase.getEmployeePositionParam().equals(Positions.QA_ENGINEER.getPosition())) {
-            qaEngineerService.createQAEngineer(createWebParamToEntityDataBase.readCreateQaEngineer(), employeeId);
+            if (createWebParamToEntityDataBase.getEmployeePositionParam().equals(Positions.MANAGER.getPosition())) {
+                managerService.createManager(createWebParamToEntityDataBase.readCreateManager(), employeeId);
+            }
+            if (createWebParamToEntityDataBase.getEmployeePositionParam().equals(Positions.DEVELOPER.getPosition())) {
+                developerService.createDeveloper(createWebParamToEntityDataBase.readCreateDeveloper(), employeeId);
+            }
+            if (createWebParamToEntityDataBase.getEmployeePositionParam().equals(Positions.QA_ENGINEER.getPosition())) {
+                qaEngineerService.createQAEngineer(createWebParamToEntityDataBase.readCreateQaEngineer(), employeeId);
+            }
+        } catch (EmployeeWebException e) {
+            List<String> errorList = e.getErrorList();
+            throw new AllEntityWebException(errorList);
         }
     }
 

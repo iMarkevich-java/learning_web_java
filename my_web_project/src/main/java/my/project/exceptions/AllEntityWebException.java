@@ -1,22 +1,18 @@
 package my.project.exceptions;
 
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 
-@Component
-public class EmployeeWebException extends RuntimeException {
+public class AllEntityWebException extends RuntimeException{
     private List<String> errorList;
 
-    public EmployeeWebException() {
+    public AllEntityWebException() {
     }
 
-    public EmployeeWebException(List<String> errorList) {
-
+    public AllEntityWebException(List<String> errorList) {
         this.errorList = errorList;
     }
 
-    public EmployeeWebException(String message) {
+    public AllEntityWebException(String message) {
         super(message);
     }
 

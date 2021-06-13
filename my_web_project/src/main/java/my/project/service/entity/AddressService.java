@@ -33,6 +33,7 @@ public class AddressService {
         addressRepositoryDao.create(address);
         return address.getAddressId();
     }
+
     public void createAddress(Address address, BigInteger employeeId) {
         addressRepositoryDao.create(address);
         employeeAddressCommunicationService.createCommunication(employeeId, address.getAddressId());

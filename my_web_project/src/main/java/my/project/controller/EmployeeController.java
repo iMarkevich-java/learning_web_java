@@ -5,6 +5,7 @@ import my.project.dto.CreateWebParamToEntityDataBase;
 import my.project.dto.UpdateEntityDataBase;
 import my.project.dto.UpdateWebParamToEntityDataBase;
 import my.project.entity.Employee;
+import my.project.exceptions.AllEntityWebException;
 import my.project.exceptions.EmployeeWebException;
 import my.project.service.communication.CreateEmployeePositionCommunicationService;
 import my.project.service.communication.EmployeeAddressCommunicationService;
@@ -25,14 +26,11 @@ import java.util.List;
 public class EmployeeController {
 
     @Autowired
+    CreateWebParamToEntityDataBase createWebParamToEntityDataBase;
+    @Autowired
     private EmployeeService employeeService;
-
     @Autowired
     private AddressService addressService;
-
-    @Autowired
-    CreateWebParamToEntityDataBase createWebParamToEntityDataBase;
-
     @Autowired
     private UpdateWebParamToEntityDataBase updateWebParamToEntityDataBase;
 
@@ -70,14 +68,15 @@ public class EmployeeController {
         return "employee/registration/index";
     }
 
-    @PostMapping(value = "/registration", produces = "text/plain;charset=UTF-8")
+    @PostMapping(value = "/registration")
     public String addEmployee(@ModelAttribute("createWebParam") CreateWebParamToEntityDataBase createWebParamToEntityDataBase,
                               Model model) {
         try {
             createEntityDataBase.create(createWebParamToEntityDataBase);
-        } catch (EmployeeWebException e) {
+        } catch (AllEntityWebException e) {
             model.addAttribute(createWebParamToEntityDataBase.readCreateEmployee());
             model.addAttribute("createWebParam", this.createWebParamToEntityDataBase);
+            model.addAttribute("messageList", e.getErrorList());
             return "employee/registration/index";
         }
         return "redirect:/mvc/employee/list";
@@ -97,10 +96,11 @@ public class EmployeeController {
                                Model model) {
         try {
             updateEntityDataBase.update(updateWebParamToEntityDataBase);
-        } catch (EmployeeWebException e) {
+        } catch (AllEntityWebException e) {
             Employee employee = employeeService.readEmployeeById(updateWebParamToEntityDataBase.getUpdateEmployeeIdParam());
             model.addAttribute("employee", employee);
             model.addAttribute("updateWebParam", this.updateWebParamToEntityDataBase);
+            model.addAttribute("messageList", e.getErrorList());
             return "/employee/edit/index";
         }
         return "redirect:/mvc/employee/list";

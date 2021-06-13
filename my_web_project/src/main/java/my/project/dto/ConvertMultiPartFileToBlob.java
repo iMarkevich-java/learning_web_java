@@ -3,6 +3,7 @@ package my.project.dto;
 import my.project.exceptions.EmployeeWebException;
 import my.project.path.PathToFiles;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,26 +18,33 @@ import java.util.List;
 @Component
 public class ConvertMultiPartFileToBlob {
 
+    @Autowired
+    EmployeeWebException employeeWebException;
+
     public ConvertMultiPartFileToBlob() {
     }
 
     public Blob convertCreatePhoto(MultipartFile photoParam) {
-        Blob photoBlob = null;
+        Blob photoBlob;
         if (!(photoParam.isEmpty())) {
             try (InputStream inputStreamImage = photoParam.getInputStream()) {
                 byte[] imageByte = IOUtils.toByteArray(inputStreamImage);
                 photoBlob = new SerialBlob(imageByte);
             } catch (IOException | SQLException e) {
-                List<String> errorList = new EmployeeWebException().getErrorList();
+                List<String> errorList = employeeWebException.getErrorList();
                 errorList.add(e.getMessage());
-                new EmployeeWebException().setErrorList(errorList);
+                employeeWebException.setErrorList(errorList);
+                throw employeeWebException;
             }
         } else {
             try (FileInputStream fileInputStream = new FileInputStream(PathToFiles.PATH_TO_TEMP_IMAGE.getPath())) {
                 byte[] imageByte = IOUtils.toByteArray(fileInputStream);
                 photoBlob = new SerialBlob(imageByte);
             } catch (SQLException | IOException e) {
-                e.printStackTrace();
+                List<String> errorList = employeeWebException.getErrorList();
+                errorList.add(e.getMessage());
+                employeeWebException.setErrorList(errorList);
+                throw employeeWebException;
             }
         }
         return photoBlob;
@@ -49,18 +57,21 @@ public class ConvertMultiPartFileToBlob {
                 byte[] imageByte = IOUtils.toByteArray(inputStreamImage);
                 photoBlob = new SerialBlob(imageByte);
             } catch (IOException | SQLException e) {
-                List<String> errorList = new EmployeeWebException().getErrorList();
+                List<String> errorList = employeeWebException.getErrorList();
                 errorList.add(e.getMessage());
-                new EmployeeWebException().setErrorList(errorList);
+                employeeWebException.setErrorList(errorList);
+                throw employeeWebException;
             }
         } else {
             try (FileInputStream fileInputStream = new FileInputStream(PathToFiles.PATH_TO_PHOTO.getPath())) {
                 byte[] imageByte = IOUtils.toByteArray(fileInputStream);
                 photoBlob = new SerialBlob(imageByte);
             } catch (SQLException | IOException e) {
-                e.printStackTrace();
+                List<String> errorList = employeeWebException.getErrorList();
+                errorList.add(e.getMessage());
+                employeeWebException.setErrorList(errorList);
+                throw employeeWebException;
             }
-
         }
         return photoBlob;
     }

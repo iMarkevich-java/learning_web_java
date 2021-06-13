@@ -1,14 +1,20 @@
 package my.project.dto;
 
 import my.project.entity.*;
+import my.project.exceptions.AllEntityWebException;
+import my.project.exceptions.EmployeeWebException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Blob;
 import java.sql.Date;
+import java.util.List;
 
 @Component
 public class CreateWebParamToEntityDataBase {
+
+    @Autowired
+    private EmployeeDtoForCreate employeeDtoForCreate;
 
     private MultipartFile employeePhotoParam;
     private String employeeFirstNameParam;
@@ -29,16 +35,13 @@ public class CreateWebParamToEntityDataBase {
     }
 
     public Employee readCreateEmployee() {
-        Blob employeePhotoBlob = new ConvertMultiPartFileToBlob().convertCreatePhoto(employeePhotoParam);
-        return Employee
-                .builder()
-                .photo(employeePhotoBlob)
-                .employeeFirstName(employeeFirstNameParam)
-                .employeeSurname(employeeSurnameParam)
-                .employeeDateOfBorn(employeeDateOfBornParam)
-                .employeePosition(employeePositionParam)
-                .employeePosition(employeePositionParam)
-                .build();
+        try {
+            employeeDtoForCreate.checkParameters(employeePhotoParam, employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
+        } catch (EmployeeWebException e) {
+            List<String> errorList = e.getErrorList();
+            throw new AllEntityWebException(errorList);
+        }
+        return employeeDtoForCreate.convertEmployeeDtoToEmployee();
     }
 
     public Address readCreateAddress() {
@@ -188,5 +191,13 @@ public class CreateWebParamToEntityDataBase {
 
     public void setAddressFlatParam(int addressFlatParam) {
         this.addressFlatParam = addressFlatParam;
+    }
+
+    public EmployeeDtoForCreate getEmployeeDtoForCreate() {
+        return employeeDtoForCreate;
+    }
+
+    public void setEmployeeDtoForCreate(EmployeeDtoForCreate employeeDtoForCreate) {
+        this.employeeDtoForCreate = employeeDtoForCreate;
     }
 }
