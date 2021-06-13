@@ -4,6 +4,7 @@ import my.project.dao.hibernate.entity.EmployeeHibernateDao;
 import my.project.dao.repository.EmployeeRepositoryDao;
 import my.project.entity.Employee;
 import my.project.exceptions.EmployeeWebException;
+import my.project.path.PathToFiles;
 import my.project.service.communication.EmployeeAddressCommunicationService;
 import my.project.service.communication.EmployeeDeveloperCommunicationService;
 import my.project.service.communication.EmployeeManagerCommunicationService;
@@ -29,27 +30,26 @@ import java.util.List;
 @Service
 public class EmployeeService {
 
+    final private EmployeeHibernateDao dao;
     @Autowired
     private EmployeeAddressCommunicationService employeeAddressCommunicationService;
-
     @Autowired
     private EmployeeDeveloperCommunicationService employeeDeveloperCommunicationService;
-
     @Autowired
     private EmployeeManagerCommunicationService employeeManagerCommunicationService;
-
     @Autowired
     private EmployeeQAEngineerCommunicationService employeeQAEngineerCommunicationService;
-
     @Autowired
     private EmployeeRepositoryDao employeeRepositoryDao;
-
-    final private EmployeeHibernateDao dao;
-
     private Boolean flag = false;
 
     public EmployeeService() {
         this.dao = new EmployeeHibernateDao();
+    }
+
+    public BigInteger createEmployee(Employee employee) {
+        employeeRepositoryDao.create(employee);
+        return employee.getEmployeeId();
     }
 
     public BigInteger createEmployee(Blob employeePhotoParam, String employeeFirstNameParam, String employeeSurnameParam, Date employeeDateOfBornParam, String employeePositionParam) {
@@ -62,7 +62,7 @@ public class EmployeeService {
 
     public BigInteger createEmployee(MultipartFile employeePhotoParam, String employeeFirstNameParam, String employeeSurnameParam, Date employeeDateOfBornParam, String employeePositionParam) {
         checkAllParameterOnException(employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
-        Blob employeePhotoBlob = convertMultiPartFileToBlob(employeePhotoParam, "src/main/webapp/images/tempImage.jpg");
+        Blob employeePhotoBlob = convertMultiPartFileToBlob(employeePhotoParam, PathToFiles.PATH_TO_TEMP_IMAGE.getPath());
         Employee employee = new Employee(employeePhotoBlob, employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
 //        dao.create(employee);
         employeeRepositoryDao.create(employee);
@@ -70,27 +70,7 @@ public class EmployeeService {
     }
 
     public void updateEmployee(Employee updateEmployee) {
-//        BigInteger employeeId = updateEmployee.getEmployeeId();
-//        Employee employee = employeeRepositoryDao.readById(employeeId);
-//        BigInteger addressId = employee.getAddress().getAddressId();
-//        if (employee.getManager() != null) {
-//            BigInteger managerId = employee.getManager().getManagerId();
-            employeeRepositoryDao.update(updateEmployee);
-//            employeeAddressCommunicationService.updateCommunication(employeeId, addressId);
-//            employeeManagerCommunicationService.updateCommunication(employeeId, managerId);
-//        }
-//        if (employee.getDeveloper() != null) {
-//            BigInteger developerId = employee.getDeveloper().getDeveloperId();
-//            employeeRepositoryDao.update(updateEmployee);
-//            employeeAddressCommunicationService.updateCommunication(employeeId, addressId);
-//            employeeDeveloperCommunicationService.updateCommunication(employeeId, developerId);
-//        }
-//        if (employee.getQaEngineer() != null) {
-//            BigInteger getqAEngineerId = employee.getQaEngineer().getqAEngineerId();
-//            employeeRepositoryDao.update(updateEmployee);
-//            employeeAddressCommunicationService.updateCommunication(employeeId, addressId);
-//            employeeQAEngineerCommunicationService.updateCommunication(employeeId, getqAEngineerId);
-//        }
+        employeeRepositoryDao.update(updateEmployee);
     }
 
     public void updateEmployeeById(String updateEmployeeIdParam, Blob updateEmployeePhotoParam, String updateEmployeeFirstNameParam, String updateEmployeeSurnameParam, Date updateEmployeeDateOfBornParam, String updateEmployeePositionParam) {
@@ -103,7 +83,7 @@ public class EmployeeService {
 
     public void updateEmployeeById(String updateEmployeeIdParam, MultipartFile updateEmployeePhotoParam, String updateEmployeeFirstNameParam, String updateEmployeeSurnameParam, Date updateEmployeeDateOfBornParam, String updateEmployeePositionParam) {
         checkAllParameterOnException(updateEmployeeIdParam, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, updateEmployeeDateOfBornParam, updateEmployeePositionParam);
-        Blob employeePhotoBlob = convertMultiPartFileToBlob(updateEmployeePhotoParam, "src/main/webapp/images/employeePhoto.jpg");
+        Blob employeePhotoBlob = convertMultiPartFileToBlob(updateEmployeePhotoParam, PathToFiles.PATH_TO_PHOTO.getPath());
         Employee employee = readEmployeeById(updateEmployeeIdParam);
         BigInteger addressId = employee.getAddress().getAddressId();
         Employee updateEmployee = new Employee(new BigInteger(updateEmployeeIdParam), employeePhotoBlob, updateEmployeeFirstNameParam, updateEmployeeSurnameParam, updateEmployeeDateOfBornParam, updateEmployeePositionParam);
@@ -120,7 +100,7 @@ public class EmployeeService {
             employeeDeveloperCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), developerId);
         }
         if (updateEmployee.getQaEngineer() != null) {
-            BigInteger qaEngineerId = employee.getQaEngineer().getqAEngineerId();
+            BigInteger qaEngineerId = employee.getQaEngineer().getQaEngineerId();
             employeeRepositoryDao.update(updateEmployee);
             employeeAddressCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), addressId);
             employeeQAEngineerCommunicationService.updateCommunication(updateEmployee.getEmployeeId(), qaEngineerId);
@@ -139,7 +119,7 @@ public class EmployeeService {
         Employee employee = employeeRepositoryDao.readById(employeeIdInt);
         Blob photo = employee.getPhoto();
         try (InputStream binaryStream = photo.getBinaryStream(1, photo.length())) {
-            ImageIO.write(ImageIO.read(binaryStream), "JPG", new File("src/main/webapp/images/employeePhoto.jpg"));
+            ImageIO.write(ImageIO.read(binaryStream), "JPG", new File(PathToFiles.PATH_TO_PHOTO.getPath()));
         } catch (SQLException | IOException throwables) {
             throwables.printStackTrace();
         }
@@ -151,7 +131,7 @@ public class EmployeeService {
         Employee employee = employeeRepositoryDao.readById(employeeIdBigInteger);
         Blob photo = employee.getPhoto();
         try (InputStream binaryStream = photo.getBinaryStream(1, photo.length())) {
-            ImageIO.write(ImageIO.read(binaryStream), "JPG", new File("src/main/webapp/images/employeePhoto.jpg"));
+            ImageIO.write(ImageIO.read(binaryStream), "JPG", new File(PathToFiles.PATH_TO_PHOTO.getPath()));
         } catch (SQLException | IOException throwables) {
             throwables.printStackTrace();
         }

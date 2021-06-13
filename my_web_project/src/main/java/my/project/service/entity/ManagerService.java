@@ -2,7 +2,6 @@ package my.project.service.entity;
 
 import my.project.dao.hibernate.entity.ManagerHibernateDao;
 import my.project.dao.repository.ManagerRepositoryDao;
-import my.project.entity.Employee;
 import my.project.entity.Manager;
 import my.project.exceptions.ManagerWebException;
 import my.project.service.communication.EmployeeManagerCommunicationService;
@@ -16,13 +15,11 @@ import java.util.List;
 @Service
 public class ManagerService {
 
+    private final ManagerHibernateDao dao;
     @Autowired
     private EmployeeManagerCommunicationService employeeManagerCommunicationService;
-
     @Autowired
     private ManagerRepositoryDao managerRepositoryDao;
-
-    private final ManagerHibernateDao dao;
 
     public ManagerService() {
         dao = new ManagerHibernateDao();
@@ -36,6 +33,11 @@ public class ManagerService {
         return manager.getManagerId();
     }
 
+    public void createManager(Manager manager, BigInteger employeeId) {
+        managerRepositoryDao.create(manager);
+        employeeManagerCommunicationService.createCommunication(employeeId, manager.getManagerId());
+    }
+
     public void updateManagerById(String updateManagerIdParam, String updateManagerDepartmentParam, int updateManagerExperienceParam) {
         checkAllParameterOnException(updateManagerIdParam, updateManagerDepartmentParam, updateManagerExperienceParam);
         BigInteger employeeId = readManagerById(updateManagerIdParam).getEmployee().getEmployeeId();
@@ -46,14 +48,16 @@ public class ManagerService {
     }
 
     public void updateManager(Manager updateManager) {
-        BigInteger employeeId = updateManager.getEmployee().getEmployeeId();
-        BigInteger managerId = updateManager.getManagerId();
         managerRepositoryDao.update(updateManager);
-//        employeeManagerCommunicationService.updateCommunication(employeeId, managerId);
     }
 
     public void deleteManagerById(BigInteger deleteManagerIdParam) {
         managerRepositoryDao.delete(deleteManagerIdParam);
+    }
+
+    public void deleteManagerByIdWithCommunication(BigInteger deleteManagerIdParam, BigInteger employeeIdFk) {
+        managerRepositoryDao.delete(deleteManagerIdParam);
+        employeeManagerCommunicationService.deleteCommunicationByEmployeeId(employeeIdFk);
     }
 
     public Manager readManagerById(String managerIdParam) {

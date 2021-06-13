@@ -1,7 +1,9 @@
 package my.project.controller;
 
+import my.project.dto.CreateEntityDataBase;
+import my.project.dto.CreateWebParamToEntityDataBase;
 import my.project.dto.UpdateEntityDataBase;
-import my.project.dto.WebParamToEntityDataBase;
+import my.project.dto.UpdateWebParamToEntityDataBase;
 import my.project.entity.Employee;
 import my.project.exceptions.EmployeeWebException;
 import my.project.service.communication.CreateEmployeePositionCommunicationService;
@@ -13,11 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.annotation.MultipartConfig;
-import java.math.BigInteger;
-import java.sql.Date;
 import java.util.List;
 
 @Controller
@@ -30,6 +29,15 @@ public class EmployeeController {
 
     @Autowired
     private AddressService addressService;
+
+    @Autowired
+    CreateWebParamToEntityDataBase createWebParamToEntityDataBase;
+
+    @Autowired
+    private UpdateWebParamToEntityDataBase updateWebParamToEntityDataBase;
+
+    @Autowired
+    private CreateEntityDataBase createEntityDataBase;
 
     @Autowired
     private UpdateEntityDataBase updateEntityDataBase;
@@ -57,45 +65,19 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "/registration")
-    public String returnRegistrationPageEmployee() {
+    public String returnRegistrationPageEmployee(Model model) {
+        model.addAttribute("createWebParam", createWebParamToEntityDataBase);
         return "employee/registration/index";
     }
 
     @PostMapping(value = "/registration", produces = "text/plain;charset=UTF-8")
-    public String addEmployee(@RequestPart(value = "photo", required = false) MultipartFile employeePhotoParam,
-                              @RequestParam(name = "employeeFirstName") String employeeFirstNameParam,
-                              @RequestParam(name = "employeeSurname") String employeeSurnameParam,
-                              @RequestParam(name = "employeeDateOfBornParam") Date employeeDateOfBornParam,
-                              @RequestParam(name = "employeePositionParam") String employeePositionParam,
-                              @RequestParam(name = "departmentParam") String departmentParam,
-                              @RequestParam(name = "experienceParam") int experienceParam,
-                              @RequestParam(name = "addressCountryParam") String addressCountryParam,
-                              @RequestParam(name = "addressRegionParam") String addressRegionParam,
-                              @RequestParam(name = "addressLocalityParam") String addressLocalityParam,
-                              @RequestParam(name = "addressCityParam") String addressCityParam,
-                              @RequestParam(name = "addressStreetParam") String addressStreetParam,
-                              @RequestParam(name = "addressHouseParam") int addressHouseParam,
-                              @RequestParam(name = "addressFlatParam") int addressFlatParam,
+    public String addEmployee(@ModelAttribute("createWebParam") CreateWebParamToEntityDataBase createWebParamToEntityDataBase,
                               Model model) {
         try {
-            BigInteger employeeId = employeeService.createEmployee(employeePhotoParam, employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
-            BigInteger addressId = addressService.createAddress(addressCountryParam, addressRegionParam, addressLocalityParam, addressCityParam, addressStreetParam, addressHouseParam, addressFlatParam);
-            employeeAddressCommunicationService.createCommunication(employeeId, addressId);
-            createEmployeePositionCommunicationService.createEntityCommunication(employeeId, employeePositionParam, departmentParam, experienceParam);
+            createEntityDataBase.create(createWebParamToEntityDataBase);
         } catch (EmployeeWebException e) {
-            List<String> errorList = e.getErrorList();
-            model.addAttribute("employeeFirstName", employeeFirstNameParam);
-            model.addAttribute("employeeSurname", employeeSurnameParam);
-            model.addAttribute("employeeDateOfBorn", employeeDateOfBornParam);
-            model.addAttribute("employeePosition", employeePositionParam);
-            model.addAttribute("messageList", errorList);
-            model.addAttribute("addressCountry", addressCountryParam);
-            model.addAttribute("addressRegion", addressRegionParam);
-            model.addAttribute("addressLocality", addressLocalityParam);
-            model.addAttribute("addressCity", addressCityParam);
-            model.addAttribute("addressStreet", addressStreetParam);
-            model.addAttribute("addressHouse", addressHouseParam);
-            model.addAttribute("addressFlat", addressFlatParam);
+            model.addAttribute(createWebParamToEntityDataBase.readCreateEmployee());
+            model.addAttribute("createWebParam", this.createWebParamToEntityDataBase);
             return "employee/registration/index";
         }
         return "redirect:/mvc/employee/list";
@@ -106,19 +88,19 @@ public class EmployeeController {
                                    Model model) {
         Employee employee = employeeService.readEmployeeById(editEmployeeIdParam);
         model.addAttribute("employee", employee);
-        model.addAttribute("webParam", new WebParamToEntityDataBase());
+        model.addAttribute("updateWebParam", updateWebParamToEntityDataBase);
         return "/employee/edit/index";
     }
 
     @PostMapping("/edit")
-    public String employeeEdit(@ModelAttribute("webParam") WebParamToEntityDataBase webParamToEntityDataBase,
+    public String employeeEdit(@ModelAttribute("updateWebParam") UpdateWebParamToEntityDataBase updateWebParamToEntityDataBase,
                                Model model) {
         try {
-            updateEntityDataBase.update(webParamToEntityDataBase);
+            updateEntityDataBase.update(updateWebParamToEntityDataBase);
         } catch (EmployeeWebException e) {
-            Employee employee = employeeService.readEmployeeById(webParamToEntityDataBase.getUpdateEmployeeIdParam());
+            Employee employee = employeeService.readEmployeeById(updateWebParamToEntityDataBase.getUpdateEmployeeIdParam());
             model.addAttribute("employee", employee);
-            model.addAttribute("webParam", new WebParamToEntityDataBase());
+            model.addAttribute("updateWebParam", this.updateWebParamToEntityDataBase);
             return "/employee/edit/index";
         }
         return "redirect:/mvc/employee/list";

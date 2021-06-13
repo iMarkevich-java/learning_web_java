@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DocType html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*, java.text.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -22,7 +22,7 @@
 					    <h3>Изменение данных сотрудника</h3>
                         <p><img src="${pageContext.request.contextPath}/images/employeePhoto.jpg" height="384" width="216" class="leftimg">
 						<div class="row">
-						    <form:form id="edit" action="${pageContext.request.contextPath}/mvc/employee/edit" method="post" enctype="multipart/form-data" modelAttribute="webParam">
+						    <form:form id="edit" action="${pageContext.request.contextPath}/mvc/employee/edit" method="post" enctype="multipart/form-data" modelAttribute="updateWebParam">
                         	    <table>
                         		    <tr height="100">
                         		        <td valign="top">
@@ -55,7 +55,6 @@
                                                 <option value="QA engineer">QA engineer</option>
                                                 </form:select>
                                             </div>
-
                                                 <c:set var = "manager" scope = "session" value = "Manager"/>
                                                 <c:if test = "${manager == employee.employeePosition }">
                                                 <label>Отдел:</label>

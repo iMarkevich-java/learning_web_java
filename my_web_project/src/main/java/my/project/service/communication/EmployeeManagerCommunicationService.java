@@ -13,10 +13,9 @@ import java.util.ArrayList;
 @Service
 public class EmployeeManagerCommunicationService {
 
+    private final EmployeeManagerCommunicationHibernateDao dao;
     @Autowired
     EmployeeManagerCommunicationRepositoryDao employeeManagerCommunicationRepositoryDao;
-
-    private final EmployeeManagerCommunicationHibernateDao dao;
 
     public EmployeeManagerCommunicationService() {
         this.dao = new EmployeeManagerCommunicationHibernateDao();
@@ -36,6 +35,10 @@ public class EmployeeManagerCommunicationService {
 //        dao.create(employeeManagerCommunication);
         employeeManagerCommunicationRepositoryDao.update(employeeManagerCommunication);
         return employeeManagerCommunication.getEmployeeManagerId();
+    }
+
+    public void deleteCommunicationByEmployeeId(BigInteger employeeIdFk) {
+        employeeManagerCommunicationRepositoryDao.delete(employeeIdFk);
     }
 
     private void checkAllParameterOnException(BigInteger employeeIdFk, BigInteger managerIdFk) {

@@ -22,12 +22,12 @@ public class QAEngineerRepositoryDao implements Dao<QaEngineer> {
 
     @Override
     public void update(QaEngineer qaEngineer) {
-        qaEngineerRepository.save(qaEngineer);
+        qaEngineerRepository.updateQaEngineer(qaEngineer.getQaEngineerId(), qaEngineer.getQaEngineerDepartment(), qaEngineer.getQaEngineerExperience());
     }
 
     @Override
-    public void delete(BigInteger id) {
-        qaEngineerRepository.deleteById(id);
+    public void delete(BigInteger qaEngineerId) {
+        qaEngineerRepository.deleteQaEngineer(qaEngineerId);
     }
 
     @Override

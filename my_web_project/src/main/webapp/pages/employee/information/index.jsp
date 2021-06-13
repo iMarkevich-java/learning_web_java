@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*, java.text.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 
 	<head>
@@ -21,12 +21,28 @@
 						<h3>Employee information</h3>
                         <p><img src="${pageContext.request.contextPath}/images/employeePhoto.jpg"  height="384" width="216" type="image/jpg" class="leftimg" alt=""/>
                     <div class="row">
-                         <p>${employee.toString()}
-                            ${developer.toString()}
-                            ${manager.toString()}
-                            ${qaEngineer.toString()}
-                            ${address.toString()} </p>
-
+                         <p>
+                         ${employee.toString()}
+                         <c:set var = "managerVar" scope = "session" value = "Manager"/>
+                         <c:if test = "${managerVar == employee.employeePosition }">
+                             <div class="row">
+                                 ${manager.toString()}
+                             </div>
+                         </c:if>
+                         <c:set var = "developerVar" scope = "session" value = "Developer"/>
+                         <c:if test = "${developerVar == employee.employeePosition }">
+                             <div class="row">
+                                ${developer.toString()}
+                             </div>
+                         </c:if>
+                         <c:set var = "qaEngineerVar" scope = "session" value = "QA engineer"/>
+                         <c:if test = "${qaEngineerVar == employee.employeePosition }">
+                             <div class="row">
+                                ${qaEngineer.toString()}
+                             </div>
+                         </c:if>
+                         ${address.toString()}
+                         </p>
 					<div class="row">
 					    <form action="${pageContext.request.contextPath}/mvc/employee/list">
 					        <button type="submit">Back</button>

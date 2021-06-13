@@ -15,15 +15,12 @@ import java.util.List;
 @Service
 public class AddressService {
 
+    final private AddressHibernateDao dao;
+    boolean flag;
     @Autowired
     private AddressRepositoryDao addressRepositoryDao;
-
     @Autowired
     private EmployeeAddressCommunicationService employeeAddressCommunicationService;
-
-    final private AddressHibernateDao dao;
-
-    boolean flag;
 
     public AddressService() {
         dao = new AddressHibernateDao();
@@ -35,6 +32,10 @@ public class AddressService {
 //        dao.create(address);
         addressRepositoryDao.create(address);
         return address.getAddressId();
+    }
+    public void createAddress(Address address, BigInteger employeeId) {
+        addressRepositoryDao.create(address);
+        employeeAddressCommunicationService.createCommunication(employeeId, address.getAddressId());
     }
 
     public void updateAddressById(String updateAddressIdParam, String updateAddressCountryParam, String updateAddressRegionParam, String updateAddressLocalityParam, String updateAddressCityParam, String updateAddressStreetParam, int updateAddressHouseParam, int updateAddressFlatParam) {

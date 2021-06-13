@@ -22,12 +22,12 @@ public class ManagerRepositoryDao implements Dao<Manager> {
 
     @Override
     public void update(Manager manager) {
-        managerRepository.save(manager);
+        managerRepository.updateManager(manager.getManagerId(), manager.getManagerDepartment(), manager.getManagerExperience());
     }
 
     @Override
-    public void delete(BigInteger id) {
-        managerRepository.deleteById(id);
+    public void delete(BigInteger managerId) {
+        managerRepository.deleteManager(managerId);
     }
 
     @Override

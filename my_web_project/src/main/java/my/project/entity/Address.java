@@ -36,7 +36,7 @@ public class Address {
     @Column(name = "flat")
     private int flat;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinTable(name = "employee_address_communication", joinColumns = @JoinColumn(name = "address_id_fk"), inverseJoinColumns = @JoinColumn(name = "employee_id_fk"))
     private Employee employee;
 

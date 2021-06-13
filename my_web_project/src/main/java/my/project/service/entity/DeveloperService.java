@@ -15,13 +15,11 @@ import java.util.List;
 @Service
 public class DeveloperService {
 
+    private final DeveloperHibernateDao dao;
     @Autowired
     private DeveloperRepositoryDao developerRepositoryDao;
-
     @Autowired
     private EmployeeDeveloperCommunicationService employeeDeveloperCommunicationService;
-
-    private final DeveloperHibernateDao dao;
 
     public DeveloperService() {
         dao = new DeveloperHibernateDao();
@@ -35,6 +33,11 @@ public class DeveloperService {
         return developer.getDeveloperId();
     }
 
+    public void createDeveloper(Developer developer, BigInteger employeeId) {
+        developerRepositoryDao.create(developer);
+        employeeDeveloperCommunicationService.createCommunication(employeeId, developer.getDeveloperId());
+    }
+
     public void updateDeveloperById(String updateDeveloperIdParam, String updateDeveloperDepartmentParam, int updateDeveloperExperienceParam) {
         checkAllParameterOnException(updateDeveloperIdParam, updateDeveloperDepartmentParam, updateDeveloperExperienceParam);
         BigInteger updateDeveloperId = new BigInteger(updateDeveloperIdParam);
@@ -44,10 +47,10 @@ public class DeveloperService {
     }
 
     public void updateDeveloper(Developer updateDeveloper) {
-        BigInteger employeeId = updateDeveloper.getEmployee().getEmployeeId();
-        BigInteger developerId = updateDeveloper.getDeveloperId();
+//        BigInteger employeeId = updateDeveloper.getEmployee().getEmployeeId();
+//        BigInteger developerId = updateDeveloper.getDeveloperId();
         developerRepositoryDao.update(updateDeveloper);
-        employeeDeveloperCommunicationService.updateCommunication(employeeId, developerId);
+//        employeeDeveloperCommunicationService.updateCommunication(employeeId, developerId);
     }
 
     public void deleteDeveloperById(String deleteDeveloperIdParam) {
@@ -56,8 +59,9 @@ public class DeveloperService {
         developerRepositoryDao.delete(deleteDeveloperId);
     }
 
-    public void deleteDeveloperById(BigInteger deleteDeveloperId) {
+    public void deleteDeveloperByIdWithCommunication(BigInteger deleteDeveloperId, BigInteger employeeId) {
         developerRepositoryDao.delete(deleteDeveloperId);
+        employeeDeveloperCommunicationService.deleteCommunicationByEmployeeId(employeeId);
     }
 
     public Developer readDeveloperById(String developerIdPParam) {

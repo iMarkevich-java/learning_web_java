@@ -14,7 +14,7 @@ public interface AddressRepository extends CrudRepository<Address, BigInteger> {
 
     @Transactional
     @Modifying
-    @Query(value = "Update Address address SET address.country = ?2, address.region = ?3, address.locality = ?4, address.city = ?5," +
-            " address.street = ?6, address.house = ?7, address.flat = ?8 WHERE address.addressId = ?1", nativeQuery = true)
+    @Query("Update Address address SET address.country = ?2, address.region = ?3, address.locality = ?4, address.city = ?5," +
+            " address.street = ?6, address.house = ?7, address.flat = ?8 WHERE address.addressId = ?1")
     void updateAddress(BigInteger addressId, String country, String region, String locality, String city, String street, int house, int flat);
 }

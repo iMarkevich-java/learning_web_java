@@ -15,13 +15,11 @@ import java.util.List;
 @Service
 public class QAEngineerService {
 
+    final QAEngineerHibernateDao dao;
     @Autowired
     private QAEngineerRepositoryDao qaEngineerRepositoryDao;
-
     @Autowired
     private EmployeeQAEngineerCommunicationService employeeQAEngineerCommunicationService;
-
-    final QAEngineerHibernateDao dao;
 
     public QAEngineerService() {
         this.dao = new QAEngineerHibernateDao();
@@ -32,7 +30,12 @@ public class QAEngineerService {
         QaEngineer qAEngineer = new QaEngineer(qAEngineerDepartmentParam, qAEngineerExperienceStringParam);
 //        dao.create(qAEngineer);
         qaEngineerRepositoryDao.create(qAEngineer);
-        return qAEngineer.getqAEngineerId();
+        return qAEngineer.getQaEngineerId();
+    }
+
+    public void createQAEngineer(QaEngineer qaEngineer, BigInteger employeeId) {
+        qaEngineerRepositoryDao.create(qaEngineer);
+        employeeQAEngineerCommunicationService.createCommunication(employeeId, qaEngineer.getQaEngineerId());
     }
 
     public void updateQAEngineerById(String updateQAEngineerIdParam, String updateQAEngineerDepartmentParam, int updateQAEngineerExperienceParam) {
@@ -44,10 +47,7 @@ public class QAEngineerService {
     }
 
     public void updateQAEngineer(QaEngineer qaEngineer) {
-        BigInteger employeeId = qaEngineer.getEmployee().getEmployeeId();
-        BigInteger qaEngineerId = qaEngineer.getqAEngineerId();
         qaEngineerRepositoryDao.update(qaEngineer);
-        employeeQAEngineerCommunicationService.updateCommunication(employeeId, qaEngineerId);
     }
 
     public void deleteQAEngineerById(String deleteQAEngineerIdParam) {
@@ -58,6 +58,11 @@ public class QAEngineerService {
 
     public void deleteQAEngineerById(BigInteger deleteQAEngineerIdParam) {
         qaEngineerRepositoryDao.delete(deleteQAEngineerIdParam);
+    }
+
+    public void deleteQaEngineerByIdWithCommunication(BigInteger deleteManagerIdParam, BigInteger employeeIdFk) {
+        qaEngineerRepositoryDao.delete(deleteManagerIdParam);
+        employeeQAEngineerCommunicationService.deleteCommunicationByEmployeeId(employeeIdFk);
     }
 
     public QaEngineer readQAEngineerById(String qaEngineerIdParam) {

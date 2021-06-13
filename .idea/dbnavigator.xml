@@ -24,7 +24,11 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc">
+        <schema name="web_java_project_database" object-types="table, view, procedure, function, constraint, index, column, dataset trigger" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="247ab219-b462-494c-a5e8-1eeb127d58fc">
@@ -43,9 +47,18 @@
         <condition column="id" operator="=" value="" active="true" />
       </filter>
     </filter-actions>
+    <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="web_java_project_database.employee_manager_communication" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="web_java_project_database.address" active-filter-id="7d913711-abfa-415e-894b-4e50d952557b">
       <filter id="7d913711-abfa-415e-894b-4e50d952557b" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND" />
     </filter-actions>
+    <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="web_java_project_database.qa_engineer" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="web_java_project_database.employee_address_communication" active-filter-id="">
+      <filter id="a267f60b-5f2d-445d-8fb6-ba3fb46a72bc" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="employee_address_communication_id" operator="=" value="" active="true" />
+      </filter>
+    </filter-actions>
+    <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="web_java_project_database.employee_qa_engineer_communication" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="web_java_project_database.employee_developer_communication" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="my_database.person" active-filter-id="">
       <filter id="7a60a25e-c685-4b49-ba61-24e01ed95b78" name="Filter" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="id" operator="=" value="" active="true" />
@@ -58,6 +71,7 @@
     <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="web_java_project_database.person" active-filter-id="cab28e18-22b9-45d0-9e7f-789fc96c04b9">
       <filter id="cab28e18-22b9-45d0-9e7f-789fc96c04b9" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND" />
     </filter-actions>
+    <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="web_java_project_database.manager" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />

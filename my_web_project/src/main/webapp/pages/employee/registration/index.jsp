@@ -1,7 +1,8 @@
 <!DocType html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*, java.text.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 	<head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -19,7 +20,7 @@
 					    <h3>Регистрация сотрудника</h3>
 					    <p>
 				        <div class="wrapper">
-					        <form id="registration" action="${pageContext.request.contextPath}/mvc/employee/registration" method="post" enctype="multipart/form-data">
+					        <form:form id="registration" action="${pageContext.request.contextPath}/mvc/employee/registration" method="post" enctype="multipart/form-data" modelAttribute="createWebParam">
 					            <table >
 					                <tr height="100">
 					                    <td valign="top">
@@ -28,41 +29,41 @@
 		    			                    </div>
 			    		                    <label>Фото:</label>
                                             <div class="row">
-                                                <input type="file" name="photo" id="photo" accept="image/jpg" multiple="multiple"/>
+                                                <form:input type="file" path="employeePhotoParam" accept="image/jpg" multiple="multiple"/>
                                             </div>
                                             <label>Имя:</label>
                                             <div class="row">
-                                                <input name="employeeFirstName" type="text" value = "${employeeFirstName}" placeholder="Введите имя"/>
+                                                <form:input path="employeeFirstNameParam" type="text" value = "${employeeFirstName}" placeholder="Введите имя"/>
                                             </div>
                                             <label>Фамилия:</label>
                                             <div class="row">
-                                                <input name="employeeSurname" type="text" value = "${employeeSurname}" placeholder="Введите фамилию"/>
+                                                <form:input path="employeeSurnameParam" type="text" value = "${employeeSurname}" placeholder="Введите фамилию"/>
                                             </div>
                                             <label>Дата рождения:</label>
                                             <div class="row">
-                                                <input name="employeeDateOfBornParam" type="date" value = "${employeeDateOfBorn}"/>
+                                                <form:input path="employeeDateOfBornParam" type="date" value = "${employeeDateOfBorn}"/>
                                             </div>
                                             <label>Должность:</label>
                                             <div class="row">
-                                                <select name="employeePositionParam" form ="registration" autofocus>
+                                                <form:select path="employeePositionParam" form ="registration">
                                                 <option disabled>Выберите должность</option>
                                                 <option value="Manager">Manager</option>
                                                 <option value="Developer">Developer</option>
                                                 <option value="QA engineer">QA engineer</option>
-                                                </select>
+                                                </form:select>
                                             </div>
                                             <label>Отдел:</label>
                                             <div class="row">
-                                                <select name="departmentParam" form ="registration" autofocus>
+                                                <form:select path="departmentParam" form ="registration">
                                                 <option disabled>Выберите тдел</option>
                                                 <option value="Economic">Economic</option>
                                                 <option value="Robotic">Robotic</option>
                                                 <option value="Industrial">Industrial</option>
-                                                </select>
+                                                </form:select>
                                             </div>
                                             <label>Стаж:</label>
                                             <div class="row">
-                                                <input name="experienceParam" type="number" value = "${experienceParam}"/>
+                                                <form:input path="experienceParam" type="number" value = "${experienceParam}"/>
                                             </div>
                                         </td>
 							            <td valign="top">
@@ -71,31 +72,31 @@
                                             </div>
                                             <label>Страна:</label>
                                             <div class="row">
-                                                <input name="addressCountryParam" type="text" value = "${addressCountry}" placeholder="Введите название страны"/>
+                                                <form:input path="addressCountryParam" type="text" value = "${addressCountry}" placeholder="Введите название страны"/>
                                             </div>
                                             <label>Область:</label>
                                             <div class="row">
-                                                <input name="addressRegionParam" type="text" value = "${addressRegion}" placeholder="Введите название области"/>
+                                                <form:input path="addressRegionParam" type="text" value = "${addressRegion}" placeholder="Введите название области"/>
                                             </div>
                                             <label>Район:</label>
                                             <div class="row">
-                                                <input name="addressLocalityParam" type="text" value = "${addressLocality}" placeholder="Введите название района"/>
+                                                <form:input path="addressLocalityParam" type="text" value = "${addressLocality}" placeholder="Введите название района"/>
                                             </div>
                                             <label>Город (населенный пункт):</label>
                                             <div class="row">
-                                                <input name="addressCityParam" type="text" value = "${addressCity}" placeholder="Введите название города"/>
+                                                <form:input path="addressCityParam" type="text" value = "${addressCity}" placeholder="Введите название города"/>
                                             </div>
                                             <label>Улица:</label>
                                             <div class="row">
-                                                <input name="addressStreetParam" type="text" value = "${addressStreet}" placeholder="Введите название улицы"/>
+                                                <form:input path="addressStreetParam" type="text" value = "${addressStreet}" placeholder="Введите название улицы"/>
                                             </div>
                                             <label>Дом:</label>
                                             <div class="row">
-                                                <input name="addressHouseParam" type="number" value = "${addressHouse}" placeholder="Введите название дома"/>
+                                                <form:input path="addressHouseParam" type="number" value = "${addressHouse}" placeholder="Введите название дома"/>
                                             </div>
                                             <label>Квартира (офис):</label>
                                             <div class="row">
-                                                <input name="addressFlatParam" type="number" value = "${addressFlat}" placeholder="Введите название квартиры"/>
+                                                <form:input path="addressFlatParam" type="number" value = "${addressFlat}" placeholder="Введите название квартиры"/>
                                             </div>
                         			    </td>
                        			    </tr>
@@ -103,7 +104,7 @@
                                  <div class="row">
                                     <button class="btn btn-danger" type="submit">add employee</button>
                                  </div>
-                            </form>
+                            </form:form>
                         </div>
                         <div class="row">
                             <form action="${pageContext.request.contextPath}/mvc/employee/list" method="get">

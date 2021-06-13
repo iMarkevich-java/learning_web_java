@@ -51,8 +51,8 @@ public class UpdateEmployeePositionCommunicationService {
             employeeDeveloperCommunicationService.updateCommunication(employeeIdFk, employee.getDeveloper().getDeveloperId());
         } else if (employeePositionParam.equals(Positions.QA_ENGINEER.getPosition())) {
             Employee employee = employeeService.readEmployeeById(employeeIdFkParam);
-            qaEngineerService.updateQAEngineerById(employee.getQaEngineer().getqAEngineerId().toString(), departmentParam, experienceParam);
-            employeeQAEngineerCommunicationService.updateCommunication(employeeIdFk, employee.getQaEngineer().getqAEngineerId());
+            qaEngineerService.updateQAEngineerById(employee.getQaEngineer().getQaEngineerId().toString(), departmentParam, experienceParam);
+            employeeQAEngineerCommunicationService.updateCommunication(employeeIdFk, employee.getQaEngineer().getQaEngineerId());
         }
     }
 }

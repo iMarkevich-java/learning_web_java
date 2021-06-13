@@ -1,6 +1,7 @@
 package my.project.dto;
 
 import my.project.exceptions.EmployeeWebException;
+import my.project.path.PathToFiles;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +20,7 @@ public class ConvertMultiPartFileToBlob {
     public ConvertMultiPartFileToBlob() {
     }
 
-    public Blob convert(MultipartFile photoParam, String pathEmployeeImage) {
+    public Blob convertCreatePhoto(MultipartFile photoParam) {
         Blob photoBlob = null;
         if (!(photoParam.isEmpty())) {
             try (InputStream inputStreamImage = photoParam.getInputStream()) {
@@ -31,7 +32,7 @@ public class ConvertMultiPartFileToBlob {
                 new EmployeeWebException().setErrorList(errorList);
             }
         } else {
-            try (FileInputStream fileInputStream = new FileInputStream(pathEmployeeImage)) {
+            try (FileInputStream fileInputStream = new FileInputStream(PathToFiles.PATH_TO_TEMP_IMAGE.getPath())) {
                 byte[] imageByte = IOUtils.toByteArray(fileInputStream);
                 photoBlob = new SerialBlob(imageByte);
             } catch (SQLException | IOException e) {
@@ -41,7 +42,7 @@ public class ConvertMultiPartFileToBlob {
         return photoBlob;
     }
 
-    public Blob convert(MultipartFile photoParam) {
+    public Blob convertUpdatePhoto(MultipartFile photoParam) {
         Blob photoBlob = null;
         if (!(photoParam.isEmpty())) {
             try (InputStream inputStreamImage = photoParam.getInputStream()) {
@@ -53,7 +54,7 @@ public class ConvertMultiPartFileToBlob {
                 new EmployeeWebException().setErrorList(errorList);
             }
         } else {
-            try (FileInputStream fileInputStream = new FileInputStream("src/main/webapp/images/employeePhoto.jpg")) {
+            try (FileInputStream fileInputStream = new FileInputStream(PathToFiles.PATH_TO_PHOTO.getPath())) {
                 byte[] imageByte = IOUtils.toByteArray(fileInputStream);
                 photoBlob = new SerialBlob(imageByte);
             } catch (SQLException | IOException e) {

@@ -1,12 +1,6 @@
 package my.project.dto;
 
-import my.project.entity.Developer;
-import my.project.entity.Employee;
-import my.project.entity.Manager;
-import my.project.entity.QaEngineer;
-import my.project.service.communication.EmployeeDeveloperCommunicationService;
-import my.project.service.communication.EmployeeManagerCommunicationService;
-import my.project.service.communication.EmployeeQAEngineerCommunicationService;
+import my.project.entity.*;
 import my.project.service.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,37 +25,27 @@ public class UpdateEntityDataBase {
     @Autowired
     private QAEngineerService qaEngineerService;
 
-    @Autowired
-    private EmployeeManagerCommunicationService employeeManagerCommunicationService;
-
-    @Autowired
-    private EmployeeDeveloperCommunicationService employeeDeveloperCommunicationService;
-
-    @Autowired
-    private EmployeeQAEngineerCommunicationService employeeQAEngineerCommunicationService;
-
     public UpdateEntityDataBase() {
     }
 
-    public void update(WebParamToEntityDataBase webParamToEntityDataBase) {
-        employeeService.updateEmployee(webParamToEntityDataBase.readUpdateEmployee());
-        addressService.updateAddress(webParamToEntityDataBase.readUpdateAddress());
+    public void update(UpdateWebParamToEntityDataBase updateWebParamToEntityDataBase) {
+        employeeService.updateEmployee(updateWebParamToEntityDataBase.readUpdateEmployee());
+        addressService.updateAddress(updateWebParamToEntityDataBase.readUpdateAddress());
 
-        Employee employee = employeeService.readEmployeeById(webParamToEntityDataBase.readUpdateEmployee().getEmployeeId());
+        Employee employee = employeeService.readEmployeeById(updateWebParamToEntityDataBase.readUpdateEmployee().getEmployeeId());
         BigInteger employeeId = employee.getEmployeeId();
-        String updateDepartmentParam = webParamToEntityDataBase.getUpdateDepartmentParam();
-        int updateExperienceParam = webParamToEntityDataBase.getUpdateExperienceParam();
+        String updateDepartmentParam = updateWebParamToEntityDataBase.getUpdateDepartmentParam();
+        int updateExperienceParam = updateWebParamToEntityDataBase.getUpdateExperienceParam();
 
-        if (webParamToEntityDataBase.getUpdateEmployeePositionParam().equals("Manager")) {
+        if (updateWebParamToEntityDataBase.getUpdateEmployeePositionParam().equals(Positions.MANAGER.getPosition())) {
             if (employee.getManager() == null) {
                 if (employee.getDeveloper() != null) {
-                    developerService.deleteDeveloperById(employee.getDeveloper().getDeveloperId());
+                    developerService.deleteDeveloperByIdWithCommunication(employee.getDeveloper().getDeveloperId(), employeeId);
                 }
                 if (employee.getQaEngineer() != null) {
-                    qaEngineerService.deleteQAEngineerById(employee.getQaEngineer().getqAEngineerId());
+                    qaEngineerService.deleteQaEngineerByIdWithCommunication(employee.getQaEngineer().getQaEngineerId(), employeeId);
                 }
-                BigInteger createManagerId = managerService.createManager(updateDepartmentParam, updateExperienceParam);
-                employeeManagerCommunicationService.createCommunication(employeeId, createManagerId);
+                managerService.createManager(updateWebParamToEntityDataBase.readUpdateManager(), employeeId);
             } else {
                 Manager manager = employee.getManager();
                 manager.setManagerDepartment(updateDepartmentParam);
@@ -69,16 +53,15 @@ public class UpdateEntityDataBase {
                 managerService.updateManager(manager);
             }
         }
-        if (webParamToEntityDataBase.getUpdateEmployeePositionParam().equals("Developer")) {
+        if (updateWebParamToEntityDataBase.getUpdateEmployeePositionParam().equals(Positions.DEVELOPER.getPosition())) {
             if (employee.getDeveloper() == null) {
                 if (employee.getManager() != null) {
-                    managerService.deleteManagerById(employee.getManager().getManagerId());
+                    managerService.deleteManagerByIdWithCommunication(employee.getManager().getManagerId(), employeeId);
                 }
                 if (employee.getQaEngineer() != null) {
-                    qaEngineerService.deleteQAEngineerById(employee.getQaEngineer().getqAEngineerId());
+                    qaEngineerService.deleteQaEngineerByIdWithCommunication(employee.getQaEngineer().getQaEngineerId(), employeeId);
                 }
-                BigInteger createDeveloperId = developerService.createDeveloper(updateDepartmentParam, updateExperienceParam);
-                employeeDeveloperCommunicationService.createCommunication(employeeId, createDeveloperId);
+                developerService.createDeveloper(updateWebParamToEntityDataBase.readUpdateDeveloper(), employeeId);
             } else {
                 Developer developer = employee.getDeveloper();
                 developer.setDeveloperDepartment(updateDepartmentParam);
@@ -86,16 +69,15 @@ public class UpdateEntityDataBase {
                 developerService.updateDeveloper(developer);
             }
         }
-        if (webParamToEntityDataBase.getUpdateEmployeePositionParam().equals("QA engineer")) {
+        if (updateWebParamToEntityDataBase.getUpdateEmployeePositionParam().equals(Positions.QA_ENGINEER.getPosition())) {
             if (employee.getQaEngineer() == null) {
                 if (employee.getManager() != null) {
-                    managerService.deleteManagerById(employee.getManager().getManagerId());
+                    managerService.deleteManagerByIdWithCommunication(employee.getManager().getManagerId(), employeeId);
                 }
                 if (employee.getDeveloper() != null) {
-                    developerService.deleteDeveloperById(employee.getDeveloper().getDeveloperId());
+                    developerService.deleteDeveloperByIdWithCommunication(employee.getDeveloper().getDeveloperId(), employeeId);
                 }
-                BigInteger qaEngineerId = qaEngineerService.createQAEngineer(updateDepartmentParam, updateExperienceParam);
-                employeeQAEngineerCommunicationService.createCommunication(employeeId, qaEngineerId);
+                qaEngineerService.createQAEngineer(updateWebParamToEntityDataBase.readUpdateQaEngineer(), employeeId);
             } else {
                 QaEngineer qaEngineer = employee.getQaEngineer();
                 qaEngineer.setQaEngineerDepartment(updateDepartmentParam);
@@ -143,29 +125,5 @@ public class UpdateEntityDataBase {
 
     public void setQaEngineerService(QAEngineerService qaEngineerService) {
         this.qaEngineerService = qaEngineerService;
-    }
-
-    public EmployeeManagerCommunicationService getEmployeeManagerCommunicationService() {
-        return employeeManagerCommunicationService;
-    }
-
-    public void setEmployeeManagerCommunicationService(EmployeeManagerCommunicationService employeeManagerCommunicationService) {
-        this.employeeManagerCommunicationService = employeeManagerCommunicationService;
-    }
-
-    public EmployeeDeveloperCommunicationService getEmployeeDeveloperCommunicationService() {
-        return employeeDeveloperCommunicationService;
-    }
-
-    public void setEmployeeDeveloperCommunicationService(EmployeeDeveloperCommunicationService employeeDeveloperCommunicationService) {
-        this.employeeDeveloperCommunicationService = employeeDeveloperCommunicationService;
-    }
-
-    public EmployeeQAEngineerCommunicationService getEmployeeQAEngineerCommunicationService() {
-        return employeeQAEngineerCommunicationService;
-    }
-
-    public void setEmployeeQAEngineerCommunicationService(EmployeeQAEngineerCommunicationService employeeQAEngineerCommunicationService) {
-        this.employeeQAEngineerCommunicationService = employeeQAEngineerCommunicationService;
     }
 }

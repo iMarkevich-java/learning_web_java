@@ -13,9 +13,10 @@ import java.sql.Date;
 
 @Repository
 public interface EmployeeRepository extends CrudRepository<Employee, BigInteger> {
+
     @Transactional
-    @Modifying
-    @Query(value = "Update Employee employee SET employee.photo = ?2, employee.employeeFirstName = ?3, employee.employeeSurname = ?4, employee.employeeDateOfBorn = ?5, employee.employeePosition = ?6 WHERE employee.employeeId = ?1", nativeQuery = true)
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("UPDATE Employee employee SET employee.photo = ?2, employee.employeeFirstName = ?3, employee.employeeSurname = ?4, employee.employeeDateOfBorn = ?5, employee.employeePosition = ?6 WHERE employee.employeeId = ?1")
     void updateEmployee(BigInteger employeeId, Blob photo, String firstName, String employeeSurname,
                         Date dateOfBorn, String employeePosition);
 

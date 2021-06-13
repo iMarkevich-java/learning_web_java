@@ -26,8 +26,8 @@ public class EmployeeQAEngineerCommunicationRepositoryDao implements Dao<Employe
     }
 
     @Override
-    public void delete(BigInteger id) {
-        employeeQAEngineerCommunicationRepository.deleteById(id);
+    public void delete(BigInteger employeeIdFk) {
+        employeeQAEngineerCommunicationRepository.deleteCommunication(employeeIdFk);
     }
 
     @Override

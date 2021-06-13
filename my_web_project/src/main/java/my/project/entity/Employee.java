@@ -180,6 +180,6 @@ public class Employee {
         return "<h2>Имя:</h2> " + employeeFirstName + "\n" +
                 "<h2>Фамилия:</h2>" + employeeSurname + "\n" +
                 "<h2>Дата рождения:</h2>" + employeeDateOfBorn + "\n" +
-                "<h2>Должность:</h2>" + employeePosition + "\n";
+                "<h2>Должность:</h2>" + employeePosition;
     }
 }

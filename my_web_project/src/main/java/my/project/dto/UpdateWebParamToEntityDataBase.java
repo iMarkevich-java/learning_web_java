@@ -9,7 +9,7 @@ import java.sql.Blob;
 import java.sql.Date;
 
 @Component
-public class WebParamToEntityDataBase {
+public class UpdateWebParamToEntityDataBase {
 
     private MultipartFile updateEmployeePhotoParam;
     private String updateEmployeeIdParam;
@@ -28,11 +28,11 @@ public class WebParamToEntityDataBase {
     private int updateAddressHouseParam;
     private int updateAddressFlatParam;
 
-    public WebParamToEntityDataBase() {
+    public UpdateWebParamToEntityDataBase() {
     }
 
     public Employee readUpdateEmployee() {
-        Blob employeePhotoBlob = new ConvertMultiPartFileToBlob().convert(updateEmployeePhotoParam);
+        Blob employeePhotoBlob = new ConvertMultiPartFileToBlob().convertUpdatePhoto(updateEmployeePhotoParam);
         BigInteger updateEmployeeIdBigInteger = new BigInteger(updateEmployeeIdParam);
         return Employee
                 .builder()

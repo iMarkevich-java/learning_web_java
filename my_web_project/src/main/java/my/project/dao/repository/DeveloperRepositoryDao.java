@@ -22,12 +22,12 @@ public class DeveloperRepositoryDao implements Dao<Developer> {
 
     @Override
     public void update(Developer developer) {
-        developerRepository.save(developer);
+        developerRepository.updateDeveloper(developer.getDeveloperId(), developer.getDeveloperDepartment(), developer.getDeveloperExperience());
     }
 
     @Override
-    public void delete(BigInteger id) {
-        developerRepository.deleteById(id);
+    public void delete(BigInteger developerId) {
+        developerRepository.deleteDeveloper(developerId);
     }
 
     @Override

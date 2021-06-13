@@ -23,7 +23,7 @@ public class AddressRepositoryDao implements Dao<Address> {
     @Override
     public void update(Address address) {
         addressRepository.updateAddress(address.getAddressId(), address.getCountry(), address.getRegion(), address.getLocality()
-                ,address.getCity(), address.getStreet(), address.getHouse(), address.getFlat());
+                , address.getCity(), address.getStreet(), address.getHouse(), address.getFlat());
     }
 
     @Override

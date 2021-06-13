@@ -13,7 +13,7 @@ public class QaEngineer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "qa_engineer_id")
-    private BigInteger qAEngineerId;
+    private BigInteger qaEngineerId;
 
     @Column(name = "qa_engineer_department")
     private String qaEngineerDepartment;
@@ -21,7 +21,7 @@ public class QaEngineer {
     @Column(name = "qa_engineer_experience")
     private int qaEngineerExperience;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinTable(name = "employee_qa_engineer_communication", joinColumns = @JoinColumn(name = "qa_engineer_id_fk"), inverseJoinColumns = @JoinColumn(name = "employee_id_fk"))
     private Employee employee;
 
@@ -33,25 +33,25 @@ public class QaEngineer {
         this.qaEngineerExperience = qaEngineerExperience;
     }
 
-    public QaEngineer(BigInteger qAEngineerId, String qaEngineerDepartment, int qaEngineerExperience) {
-        this.qAEngineerId = qAEngineerId;
+    public QaEngineer(BigInteger qaEngineerId, String qaEngineerDepartment, int qaEngineerExperience) {
+        this.qaEngineerId = qaEngineerId;
         this.qaEngineerDepartment = qaEngineerDepartment;
         this.qaEngineerExperience = qaEngineerExperience;
     }
 
-    public QaEngineer(BigInteger qAEngineerId, String qaEngineerDepartment, int qaEngineerExperience, Employee employee) {
-        this.qAEngineerId = qAEngineerId;
+    public QaEngineer(BigInteger qaEngineerId, String qaEngineerDepartment, int qaEngineerExperience, Employee employee) {
+        this.qaEngineerId = qaEngineerId;
         this.qaEngineerDepartment = qaEngineerDepartment;
         this.qaEngineerExperience = qaEngineerExperience;
         this.employee = employee;
     }
 
-    public BigInteger getqAEngineerId() {
-        return qAEngineerId;
+    public BigInteger getQaEngineerId() {
+        return qaEngineerId;
     }
 
-    public void setqAEngineerId(BigInteger qAEngineerId) {
-        this.qAEngineerId = qAEngineerId;
+    public void setQaEngineerId(BigInteger qaEngineerId) {
+        this.qaEngineerId = qaEngineerId;
     }
 
     public String getQaEngineerDepartment() {
@@ -83,12 +83,12 @@ public class QaEngineer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         QaEngineer that = (QaEngineer) o;
-        return qaEngineerExperience == that.qaEngineerExperience && qAEngineerId.equals(that.qAEngineerId) && qaEngineerDepartment.equals(that.qaEngineerDepartment) && employee.equals(that.employee);
+        return qaEngineerExperience == that.qaEngineerExperience && qaEngineerId.equals(that.qaEngineerId) && qaEngineerDepartment.equals(that.qaEngineerDepartment) && employee.equals(that.employee);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(qAEngineerId, qaEngineerDepartment, qaEngineerExperience, employee);
+        return Objects.hash(qaEngineerId, qaEngineerDepartment, qaEngineerExperience, employee);
     }
 
     @Override

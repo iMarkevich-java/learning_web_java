@@ -22,7 +22,7 @@ public class Manager {
     @Column(name = "manager_experience")
     private int managerExperience;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinTable(name = "employee_manager_communication", joinColumns = @JoinColumn(name = "manager_id_fk"), inverseJoinColumns = @JoinColumn(name = "employee_id_fk"))
     private Employee employee;
 
