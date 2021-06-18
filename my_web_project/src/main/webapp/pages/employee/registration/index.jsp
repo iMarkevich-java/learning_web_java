@@ -33,20 +33,21 @@
                                             </div>
                                             <label>Имя:</label>
                                             <div class="row">
-                                                <form:input path="employeeFirstNameParam" type="text" value = "${employeeFirstName}" placeholder="Введите имя"/>
+                                                <form:input path="employeeFirstNameParam" type="text" value = "${webParam.employeeFirstNameParam}" placeholder="Введите имя"/>
                                             </div>
                                             <label>Фамилия:</label>
                                             <div class="row">
-                                                <form:input path="employeeSurnameParam" type="text" value = "${employeeSurname}" placeholder="Введите фамилию"/>
+                                                <form:input path="employeeSurnameParam" type="text" value = "${webParam.employeeSurnameParam}" placeholder="Введите фамилию"/>
                                             </div>
                                             <label>Дата рождения:</label>
                                             <div class="row">
-                                                <form:input path="employeeDateOfBornParam" type="date" value = "${employeeDateOfBorn}"/>
+                                                <form:input path="employeeDateOfBornParam" type="date" value="${date}"/>
                                             </div>
                                             <label>Должность:</label>
                                             <div class="row">
                                                 <form:select path="employeePositionParam" form ="registration">
-                                                <option disabled>Выберите должность</option>
+                                                <option disabled></option>
+                                                <option value="">Выберите должность</option>
                                                 <option value="Manager">Manager</option>
                                                 <option value="Developer">Developer</option>
                                                 <option value="QA engineer">QA engineer</option>
@@ -55,7 +56,7 @@
                                             <label>Отдел:</label>
                                             <div class="row">
                                                 <form:select path="departmentParam" form ="registration">
-                                                <option disabled>Выберите тдел</option>
+                                                <option value="">Выберите тдел</option>
                                                 <option value="Economic">Economic</option>
                                                 <option value="Robotic">Robotic</option>
                                                 <option value="Industrial">Industrial</option>
@@ -63,7 +64,7 @@
                                             </div>
                                             <label>Стаж:</label>
                                             <div class="row">
-                                                <form:input path="experienceParam" type="number" value = "${experienceParam}"/>
+                                                <form:input path="experienceParam" type="number" value = "${webParam.experienceParam}"/>
                                             </div>
                                         </td>
 							            <td valign="top">
@@ -72,31 +73,31 @@
                                             </div>
                                             <label>Страна:</label>
                                             <div class="row">
-                                                <form:input path="addressCountryParam" type="text" value = "${addressCountry}" placeholder="Введите название страны"/>
+                                                <form:input path="addressCountryParam" type="text" value = "${webParam.addressCountryParam}" placeholder="Введите название страны"/>
                                             </div>
                                             <label>Область:</label>
                                             <div class="row">
-                                                <form:input path="addressRegionParam" type="text" value = "${addressRegion}" placeholder="Введите название области"/>
+                                                <form:input path="addressRegionParam" type="text" value = "${webParam.addressRegionParam}" placeholder="Введите название области"/>
                                             </div>
                                             <label>Район:</label>
                                             <div class="row">
-                                                <form:input path="addressLocalityParam" type="text" value = "${addressLocality}" placeholder="Введите название района"/>
+                                                <form:input path="addressLocalityParam" type="text" value = "${webParam.addressLocalityParam}" placeholder="Введите название района"/>
                                             </div>
                                             <label>Город (населенный пункт):</label>
                                             <div class="row">
-                                                <form:input path="addressCityParam" type="text" value = "${addressCity}" placeholder="Введите название города"/>
+                                                <form:input path="addressCityParam" type="text" value = "${webParam.addressCityParam}" placeholder="Введите название города"/>
                                             </div>
                                             <label>Улица:</label>
                                             <div class="row">
-                                                <form:input path="addressStreetParam" type="text" value = "${addressStreet}" placeholder="Введите название улицы"/>
+                                                <form:input path="addressStreetParam" type="text" value = "${webParam.addressStreetParam}" placeholder="Введите название улицы"/>
                                             </div>
                                             <label>Дом:</label>
                                             <div class="row">
-                                                <form:input path="addressHouseParam" type="number" value = "${addressHouse}" placeholder="Введите название дома"/>
+                                                <form:input path="addressHouseParam" type="number" value = "${webParam.addressHouseParam}" placeholder="Введите название дома"/>
                                             </div>
                                             <label>Квартира (офис):</label>
                                             <div class="row">
-                                                <form:input path="addressFlatParam" type="number" value = "${addressFlat}" placeholder="Введите название квартиры"/>
+                                                <form:input path="addressFlatParam" type="number" value = "${webParam.addressFlatParam}" placeholder="Введите название квартиры"/>
                                             </div>
                         			    </td>
                        			    </tr>

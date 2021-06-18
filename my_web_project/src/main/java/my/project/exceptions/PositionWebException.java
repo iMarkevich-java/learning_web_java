@@ -2,17 +2,18 @@ package my.project.exceptions;
 
 import java.util.List;
 
-public class AllEntityWebException extends RuntimeException {
+public class PositionWebException extends RuntimeException {
     private List<String> errorList;
 
-    public AllEntityWebException() {
+    public PositionWebException() {
+
     }
 
-    public AllEntityWebException(List<String> errorList) {
+    public PositionWebException(List<String> errorList) {
         this.errorList = errorList;
     }
 
-    public AllEntityWebException(String message) {
+    public PositionWebException(String message) {
         super(message);
     }
 

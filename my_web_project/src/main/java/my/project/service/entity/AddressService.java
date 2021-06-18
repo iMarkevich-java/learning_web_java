@@ -50,9 +50,7 @@ public class AddressService {
 
     public void updateAddress(Address updateAddress) {
         BigInteger addressId = updateAddress.getAddressId();
-        BigInteger employeeId = addressRepositoryDao.readById(addressId).getEmployee().getEmployeeId();
         addressRepositoryDao.update(updateAddress);
-//        employeeAddressCommunicationService.updateCommunication(employeeId, addressId);
     }
 
     public void deleteAddressById(String deleteAddressIdParam) {

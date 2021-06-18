@@ -59,6 +59,7 @@
                                                 <c:if test = "${manager == employee.employeePosition }">
                                                 <label>Отдел:</label>
                                                     <div class="row">
+                                                        <form:input path="updateManagerIdParam" type="hidden" value = "${employee.manager.managerId}"/>
                                                         <form:select path="updateDepartmentParam" name="updateDepartmentParam" form ="edit">
                                                         <option value="${employee.manager.managerDepartment}">${employee.manager.managerDepartment}</option>
                                                         <option value="Economic">Economic</option>
@@ -75,6 +76,7 @@
                                                 <c:if test = "${developer == employee.employeePosition }">
                                                 <label>Отдел:</label>
                                                     <div class="row">
+                                                        <form:input path="updateDeveloperIdParam" type="hidden" value = "${employee.developer.developerId}"/>
                                                         <form:select path="updateDepartmentParam" name="updateDepartmentParam" form ="edit">
                                                         <option value="${employee.developer.developerDepartment}">${employee.developer.developerDepartment}</option>
                                                         <option value="Economic">Economic</option>
@@ -91,6 +93,7 @@
                                                 <c:if test = "${qaEngineer == employee.employeePosition }">
                                                 <label>Отдел:</label>
                                                     <div class="row">
+                                                        <form:input path="updateQaEngineerIdParam" type="hidden" value = "${employee.qaEngineer.qaEngineerId}"/>
                                                         <form:select path="updateDepartmentParam" name="updateDepartmentParam" form ="edit">
                                                         <option value="${employee.qaEngineer.qaEngineerDepartment}">${employee.qaEngineer.qaEngineerDepartment}</option>
                                                         <option value="Economic">Economic</option>

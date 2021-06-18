@@ -1,12 +1,11 @@
 package my.project.controller;
 
-import my.project.dto.CreateEntityDataBase;
-import my.project.dto.CreateWebParamToEntityDataBase;
-import my.project.dto.UpdateEntityDataBase;
-import my.project.dto.UpdateWebParamToEntityDataBase;
+import my.project.dto.create.CreateEntityDataBase;
+import my.project.dto.create.CreateWebParamToEntityDataBase;
+import my.project.dto.update.UpdateEntityDataBase;
+import my.project.dto.update.UpdateWebParamToEntityDataBase;
 import my.project.entity.Employee;
 import my.project.exceptions.AllEntityWebException;
-import my.project.exceptions.EmployeeWebException;
 import my.project.service.communication.CreateEmployeePositionCommunicationService;
 import my.project.service.communication.EmployeeAddressCommunicationService;
 import my.project.service.communication.UpdateEmployeePositionCommunicationService;
@@ -18,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.annotation.MultipartConfig;
+import java.sql.Date;
 import java.util.List;
 
 @Controller
@@ -65,16 +65,18 @@ public class EmployeeController {
     @GetMapping(value = "/registration")
     public String returnRegistrationPageEmployee(Model model) {
         model.addAttribute("createWebParam", createWebParamToEntityDataBase);
+        model.addAttribute("date", new Date(00 - 00 - 0000));
         return "employee/registration/index";
     }
 
     @PostMapping(value = "/registration")
-    public String addEmployee(@ModelAttribute("createWebParam") CreateWebParamToEntityDataBase createWebParamToEntityDataBase,
-                              Model model) {
+    public String createEmployee(@ModelAttribute("createWebParam") CreateWebParamToEntityDataBase createWebParamToEntityDataBase,
+                                 Model model) {
         try {
             createEntityDataBase.create(createWebParamToEntityDataBase);
         } catch (AllEntityWebException e) {
-            model.addAttribute(createWebParamToEntityDataBase.readCreateEmployee());
+            model.addAttribute("date", createWebParamToEntityDataBase.getEmployeeDateOfBornParam());
+            model.addAttribute("webParam", createWebParamToEntityDataBase);
             model.addAttribute("createWebParam", this.createWebParamToEntityDataBase);
             model.addAttribute("messageList", e.getErrorList());
             return "employee/registration/index";

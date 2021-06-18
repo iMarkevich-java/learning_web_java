@@ -1,11 +1,8 @@
-package my.project.dto;
+package my.project.dto.update;
 
-import my.project.entity.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigInteger;
-import java.sql.Blob;
 import java.sql.Date;
 
 @Component
@@ -18,6 +15,9 @@ public class UpdateWebParamToEntityDataBase {
     private Date updateEmployeeDateOfBornParam;
     private String updateEmployeePositionParam;
     private String updateDepartmentParam;
+    private String updateManagerIdParam;
+    private String updateDeveloperIdParam;
+    private String updateQaEngineerIdParam;
     private int updateExperienceParam;
     private String updateAddressIdParam;
     private String updateAddressCountryParam;
@@ -29,60 +29,6 @@ public class UpdateWebParamToEntityDataBase {
     private int updateAddressFlatParam;
 
     public UpdateWebParamToEntityDataBase() {
-    }
-
-    public Employee readUpdateEmployee() {
-        Blob employeePhotoBlob = new ConvertMultiPartFileToBlob().convertUpdatePhoto(updateEmployeePhotoParam);
-        BigInteger updateEmployeeIdBigInteger = new BigInteger(updateEmployeeIdParam);
-        return Employee
-                .builder()
-                .employeeId(updateEmployeeIdBigInteger)
-                .photo(employeePhotoBlob)
-                .employeeFirstName(updateEmployeeFirstNameParam)
-                .employeeSurname(updateEmployeeSurnameParam)
-                .employeeDateOfBorn(updateEmployeeDateOfBornParam)
-                .employeePosition(updateEmployeePositionParam)
-                .employeePosition(updateEmployeePositionParam)
-                .build();
-    }
-
-    public Address readUpdateAddress() {
-        BigInteger updateAddressIdBigInteger = new BigInteger(updateAddressIdParam);
-        return Address
-                .builder()
-                .addressId(updateAddressIdBigInteger)
-                .country(updateAddressCountryParam)
-                .region(updateAddressRegionParam)
-                .locality(updateAddressLocalityParam)
-                .city(updateAddressCityParam)
-                .street(updateAddressStreetParam)
-                .house(updateAddressHouseParam)
-                .flat(updateAddressFlatParam)
-                .build();
-    }
-
-    public Manager readUpdateManager() {
-        return Manager
-                .builder()
-                .managerDepartment(updateDepartmentParam)
-                .managerExperience(updateExperienceParam)
-                .build();
-    }
-
-    public QaEngineer readUpdateQaEngineer() {
-        return QaEngineer
-                .builder()
-                .qaEngineerDepartment(updateDepartmentParam)
-                .qaEngineerExperience(updateExperienceParam)
-                .build();
-    }
-
-    public Developer readUpdateDeveloper() {
-        return Developer
-                .builder()
-                .developerDepartment(updateDepartmentParam)
-                .developerExperience(updateExperienceParam)
-                .build();
     }
 
     public MultipartFile getUpdateEmployeePhotoParam() {
@@ -139,6 +85,30 @@ public class UpdateWebParamToEntityDataBase {
 
     public void setUpdateDepartmentParam(String updateDepartmentParam) {
         this.updateDepartmentParam = updateDepartmentParam;
+    }
+
+    public String getUpdateManagerIdParam() {
+        return updateManagerIdParam;
+    }
+
+    public void setUpdateManagerIdParam(String updateManagerIdParam) {
+        this.updateManagerIdParam = updateManagerIdParam;
+    }
+
+    public String getUpdateDeveloperIdParam() {
+        return updateDeveloperIdParam;
+    }
+
+    public void setUpdateDeveloperIdParam(String updateDeveloperIdParam) {
+        this.updateDeveloperIdParam = updateDeveloperIdParam;
+    }
+
+    public String getUpdateQaEngineerIdParam() {
+        return updateQaEngineerIdParam;
+    }
+
+    public void setUpdateQaEngineerIdParam(String updateQaEngineerIdParam) {
+        this.updateQaEngineerIdParam = updateQaEngineerIdParam;
     }
 
     public int getUpdateExperienceParam() {

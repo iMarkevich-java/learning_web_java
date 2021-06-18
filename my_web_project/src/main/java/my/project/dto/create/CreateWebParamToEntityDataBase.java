@@ -1,20 +1,12 @@
-package my.project.dto;
+package my.project.dto.create;
 
-import my.project.entity.*;
-import my.project.exceptions.AllEntityWebException;
-import my.project.exceptions.EmployeeWebException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Date;
-import java.util.List;
 
 @Component
 public class CreateWebParamToEntityDataBase {
-
-    @Autowired
-    private EmployeeDtoForCreate employeeDtoForCreate;
 
     private MultipartFile employeePhotoParam;
     private String employeeFirstNameParam;
@@ -32,53 +24,6 @@ public class CreateWebParamToEntityDataBase {
     private int addressFlatParam;
 
     public CreateWebParamToEntityDataBase() {
-    }
-
-    public Employee readCreateEmployee() {
-        try {
-            employeeDtoForCreate.checkParameters(employeePhotoParam, employeeFirstNameParam, employeeSurnameParam, employeeDateOfBornParam, employeePositionParam);
-        } catch (EmployeeWebException e) {
-            List<String> errorList = e.getErrorList();
-            throw new AllEntityWebException(errorList);
-        }
-        return employeeDtoForCreate.convertEmployeeDtoToEmployee();
-    }
-
-    public Address readCreateAddress() {
-        return Address
-                .builder()
-                .country(addressCountryParam)
-                .region(addressRegionParam)
-                .locality(addressLocalityParam)
-                .city(addressCityParam)
-                .street(addressStreetParam)
-                .house(addressHouseParam)
-                .flat(addressFlatParam)
-                .build();
-    }
-
-    public Manager readCreateManager() {
-        return Manager
-                .builder()
-                .managerDepartment(departmentParam)
-                .managerExperience(experienceParam)
-                .build();
-    }
-
-    public QaEngineer readCreateQaEngineer() {
-        return QaEngineer
-                .builder()
-                .qaEngineerDepartment(departmentParam)
-                .qaEngineerExperience(experienceParam)
-                .build();
-    }
-
-    public Developer readCreateDeveloper() {
-        return Developer
-                .builder()
-                .developerDepartment(departmentParam)
-                .developerExperience(experienceParam)
-                .build();
     }
 
     public MultipartFile getEmployeePhotoParam() {
@@ -191,13 +136,5 @@ public class CreateWebParamToEntityDataBase {
 
     public void setAddressFlatParam(int addressFlatParam) {
         this.addressFlatParam = addressFlatParam;
-    }
-
-    public EmployeeDtoForCreate getEmployeeDtoForCreate() {
-        return employeeDtoForCreate;
-    }
-
-    public void setEmployeeDtoForCreate(EmployeeDtoForCreate employeeDtoForCreate) {
-        this.employeeDtoForCreate = employeeDtoForCreate;
     }
 }

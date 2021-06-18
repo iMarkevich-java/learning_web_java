@@ -59,6 +59,10 @@ public class DeveloperService {
         developerRepositoryDao.delete(deleteDeveloperId);
     }
 
+    public void deleteDeveloperById(BigInteger deleteDeveloperIdParam) {
+        developerRepositoryDao.delete(deleteDeveloperIdParam);
+    }
+
     public void deleteDeveloperByIdWithCommunication(BigInteger deleteDeveloperId, BigInteger employeeId) {
         developerRepositoryDao.delete(deleteDeveloperId);
         employeeDeveloperCommunicationService.deleteCommunicationByEmployeeId(employeeId);
