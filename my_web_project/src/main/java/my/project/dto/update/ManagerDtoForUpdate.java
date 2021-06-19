@@ -15,5 +15,13 @@ public class ManagerDtoForUpdate {
                 .managerExperience(experienceParam)
                 .build();
     }
+
+    public Manager convertManagerDtoToManager(String departmentParam, int experienceParam) {
+        return Manager
+                .builder()
+                .managerDepartment(departmentParam)
+                .managerExperience(experienceParam)
+                .build();
+    }
 }
 

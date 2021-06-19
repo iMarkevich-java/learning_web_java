@@ -15,4 +15,12 @@ public class DeveloperDtoForUpdate {
                 .developerExperience(developerExperience)
                 .build();
     }
+
+    public Developer convertDeveloperDtoToDeveloper(String developerDepartment, int developerExperience) {
+        return Developer
+                .builder()
+                .developerDepartment(developerDepartment)
+                .developerExperience(developerExperience)
+                .build();
+    }
 }

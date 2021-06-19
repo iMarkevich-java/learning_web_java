@@ -15,4 +15,12 @@ public class QaEngineerDtoForUpdate {
                 .qaEngineerExperience(developerExperience)
                 .build();
     }
+
+    public QaEngineer convertQaEngineerDtoToQaEngineer(String developerDepartment, int developerExperience) {
+        return QaEngineer
+                .builder()
+                .qaEngineerDepartment(developerDepartment)
+                .qaEngineerExperience(developerExperience)
+                .build();
+    }
 }

@@ -3,13 +3,22 @@ package my.project.dto.update;
 import my.project.dto.ConvertMultiPartFileToBlob;
 import my.project.entity.Employee;
 import my.project.exceptions.EmployeeWebException;
+import my.project.path.PathToFiles;
+import my.project.service.entity.EmployeeService;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.sql.Blob;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class EmployeeDtoForUpdate {
@@ -20,6 +29,15 @@ public class EmployeeDtoForUpdate {
     private String updateEmployeeSurnameParam;
     private Date updateEmployeeDateOfBornParam;
     private String updateEmployeePositionParam;
+
+    @Autowired
+    private ConvertMultiPartFileToBlob convertMultiPartFileToBlob;
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
+    private EmployeeWebException employeeWebException;
 
     public EmployeeDtoForUpdate() {
     }
@@ -41,11 +59,11 @@ public class EmployeeDtoForUpdate {
             errorList.add(errorMessage);
             flag = true;
         }
-        if (updateEmployeePhotoParam.isEmpty()) {
-            String errorMessage = "Employee id can't be empty!!!";
-            errorList.add(errorMessage);
-            flag = true;
-        }
+//        if (updateEmployeePhotoParam.isEmpty()) {
+//            String errorMessage = "Employee photo can't be empty!!!";
+//            errorList.add(errorMessage);
+//            flag = true;
+//        }
         if (updateEmployeeFirstNameParam.isEmpty()) {
             String errorMessage = "Employee first name can't be empty!!!";
             errorList.add(errorMessage);
@@ -78,7 +96,23 @@ public class EmployeeDtoForUpdate {
     }
 
     public Employee convertEmployeeDtoToEmployee() {
-        Blob employeePhotoBlob = new ConvertMultiPartFileToBlob().convertCreatePhoto(updateEmployeePhotoParam);
+        Blob employeePhotoBlob = null;
+        if (updateEmployeePhotoParam.getSize() == 0) {
+//            employeeService.readEmployeeById(updateEmployeeIdParam).getPhoto();
+            try (FileInputStream fileInputStream = new FileInputStream(PathToFiles.PATH_TO_PHOTO.getPath())) {
+                byte[] imageByte = IOUtils.toByteArray(fileInputStream);
+                employeePhotoBlob = new SerialBlob(imageByte);
+            } catch (SQLException | IOException e) {
+                List<String> errorList = employeeWebException.getErrorList();
+                errorList.add("can't find photo for class" + getClass().getName());
+                employeeWebException.setErrorList(errorList);
+                throw employeeWebException;
+            }
+        } else {
+            employeePhotoBlob = convertMultiPartFileToBlob.convertCreatePhoto(updateEmployeePhotoParam);
+        }
+
+
         BigInteger employeeId = new BigInteger(updateEmployeeIdParam);
         return Employee
                 .builder()

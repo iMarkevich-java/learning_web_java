@@ -96,7 +96,7 @@ public class UpdateEntityDataBase {
             if(employeePosition.equals(Positions.MANAGER.getPosition())){
                 managerService.updateManager(positionDtoForUpdate.readUpdateManager());
             }else {
-                managerService.createManager(positionDtoForUpdate.readUpdateManager(), employeeId);
+                managerService.createManager(positionDtoForUpdate.readManagerForCreate(), employeeId);
             }
         }
         if (updateWebParamToEntityDataBase.getUpdateEmployeePositionParam().equals(Positions.DEVELOPER.getPosition())) {
@@ -109,7 +109,7 @@ public class UpdateEntityDataBase {
             if(employeePosition.equals(Positions.DEVELOPER.getPosition())){
                 developerService.updateDeveloper(positionDtoForUpdate.readUpdateDeveloper());
             }else {
-               developerService.createDeveloper(positionDtoForUpdate.readUpdateDeveloper(), employeeId);
+               developerService.createDeveloper(positionDtoForUpdate.readDeveloperForCreate(), employeeId);
             }
         }
         if (updateWebParamToEntityDataBase.getUpdateEmployeePositionParam().equals(Positions.QA_ENGINEER.getPosition())) {
@@ -119,10 +119,10 @@ public class UpdateEntityDataBase {
                 developerService.deleteDeveloperById(employee.getDeveloper().getDeveloperId());
             }
 
-            if(employeePosition.equals(Positions.DEVELOPER.getPosition())){
-                developerService.updateDeveloper(positionDtoForUpdate.readUpdateDeveloper());
+            if(employeePosition.equals(Positions.QA_ENGINEER.getPosition())){
+                qaEngineerService.updateQAEngineer(positionDtoForUpdate.readUpdateQaEngineer());
             }else {
-                developerService.createDeveloper(positionDtoForUpdate.readUpdateDeveloper(), employeeId);
+                qaEngineerService.createQAEngineer(positionDtoForUpdate.readQaEngineerForCreate(), employeeId);
             }
         }
     }

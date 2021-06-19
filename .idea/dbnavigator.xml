@@ -54,12 +54,12 @@
       </filter>
     </filter-actions>
     <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="web_java_project_database.employee_qa_engineer_communication" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="web_java_project_database.employee_developer_communication" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="my_database.person" active-filter-id="">
       <filter id="7a60a25e-c685-4b49-ba61-24e01ed95b78" name="Filter" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="id" operator="=" value="" active="true" />
       </filter>
     </filter-actions>
-    <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="web_java_project_database.employee_developer_communication" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="247ab219-b462-494c-a5e8-1eeb127d58fc" dataset="web_java_project_database.employee" active-filter-id="90627c2f-0858-461e-8924-e29ce0d7962e">
       <filter id="90627c2f-0858-461e-8924-e29ce0d7962e" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND" />
     </filter-actions>

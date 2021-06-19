@@ -95,13 +95,25 @@ public class PositionDtoForUpdate {
         return managerDtoForUpdate.convertManagerDtoToManager(departmentParam, experienceParam, updateManagerId);
     }
 
+    public Manager readManagerForCreate() {
+        return managerDtoForUpdate.convertManagerDtoToManager(departmentParam, experienceParam);
+    }
+
     public Developer readUpdateDeveloper() {
         BigInteger updateDeveloperId = new BigInteger(updateDeveloperIdParam);
         return developerDtoForUpdate.convertDeveloperDtoToDeveloper(departmentParam, experienceParam, updateDeveloperId);
     }
 
+    public Developer readDeveloperForCreate() {
+        return developerDtoForUpdate.convertDeveloperDtoToDeveloper(departmentParam, experienceParam);
+    }
+
     public QaEngineer readUpdateQaEngineer() {
         BigInteger updateQaEngineer = new BigInteger(updateQaEngineerIdParam);
         return qaEngineerDtoForUpdate.convertQaEngineerDtoToQaEngineer(departmentParam, experienceParam, updateQaEngineer);
+    }
+
+    public QaEngineer readQaEngineerForCreate() {
+        return qaEngineerDtoForUpdate.convertQaEngineerDtoToQaEngineer(departmentParam, experienceParam);
     }
 }

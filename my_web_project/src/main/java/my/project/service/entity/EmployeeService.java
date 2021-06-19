@@ -16,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigInteger;
 import java.sql.Blob;
 import java.sql.Date;
@@ -118,10 +115,18 @@ public class EmployeeService {
 //        Employee employee = dao.readById(employeeIdInt);
         Employee employee = employeeRepositoryDao.readById(employeeIdInt);
         Blob photo = employee.getPhoto();
-        try (InputStream binaryStream = photo.getBinaryStream(1, photo.length())) {
-            ImageIO.write(ImageIO.read(binaryStream), "JPG", new File(PathToFiles.PATH_TO_PHOTO.getPath()));
-        } catch (SQLException | IOException throwables) {
-            throwables.printStackTrace();
+        if(!(photo == null)){
+            try (InputStream binaryStream = photo.getBinaryStream(1, photo.length())) {
+                ImageIO.write(ImageIO.read(binaryStream), "JPG", new File(PathToFiles.PATH_TO_PHOTO.getPath()));
+            } catch (SQLException | IOException throwables) {
+
+            }
+        }else {
+            try (FileInputStream fileInputStream = new FileInputStream(PathToFiles.PATH_TO_TEMP_IMAGE.getPath())) {
+                ImageIO.write(ImageIO.read(fileInputStream), "JPG", new File(PathToFiles.PATH_TO_PHOTO.getPath()));
+            } catch (IOException e) {
+                throw new EmployeeWebException("Can't save employee photo in class " + getClass().getName());
+            }
         }
         return employee;
     }
