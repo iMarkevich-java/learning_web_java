@@ -1,6 +1,6 @@
 package my.project.servlet.address;
 
-import my.project.service.entity.AddressService;
+import my.project.service.employee.entity.AddressService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

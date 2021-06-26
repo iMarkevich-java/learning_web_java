@@ -1,6 +1,6 @@
 package my.project.servlet.developer;
 
-import my.project.service.entity.DeveloperService;
+import my.project.service.employee.entity.DeveloperService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

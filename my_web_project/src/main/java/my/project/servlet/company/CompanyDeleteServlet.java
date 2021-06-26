@@ -1,6 +1,6 @@
 package my.project.servlet.company;
 
-import my.project.service.entity.CompanyService;
+import my.project.service.employee.entity.CompanyService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

@@ -6,7 +6,7 @@
 <html>
 	<head>
     		<meta charset="utf-8">
-    		<link rel="stylesheet" type="text/css" href="pages/style/style.css">
+    		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
     		<title>Сделаем ваш первый бесплатный веб сайт</title>
     	</head>
     	<body>
@@ -14,14 +14,11 @@
     			<div class="header">
     				<div class="logo"><a href="">Ваш<span class="black">Сайт</span><span class="gray">.net</span></a><p>Ваш первый бесплатный веб сайт</p></div>
     				<ul class="nav">
-					<li><a href="start">Home</a></li>
-					<li><a href="clients" class="active">Clients</a></li>
-					<li><a href="employees">Employees</a></li>
-					<li><a href="developers">Developers</a></li>
-					<li><a href="projects">Projects</a></li>
-					<li><a href="addresses">Addresses</a></li>
-				    <li><a href="companies">Companies</a></li>
-				</ul>
+					    <li><a href="${pageContext.request.contextPath}/mvc/start">Home</a></li>
+                        <li><a href="${pageContext.request.contextPath}/mvc/client/list"  class="active">Clients</a></li>
+                        <li><a href="${pageContext.request.contextPath}/mvc/employee/list">Employees</a></li>
+                        <li><a href="${pageContext.request.contextPath}/mvc/project/list">Projects</a></li>
+				    </ul>
 			</div>
 			<div class="main">
 			    <div >

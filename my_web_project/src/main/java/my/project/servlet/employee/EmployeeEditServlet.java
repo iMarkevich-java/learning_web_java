@@ -2,8 +2,8 @@ package my.project.servlet.employee;
 
 import my.project.entity.Employee;
 import my.project.exceptions.EmployeeWebException;
-import my.project.service.entity.EmployeeService;
-import my.project.service.entity.StringToSqlDate;
+import my.project.service.employee.entity.EmployeeService;
+import my.project.service.employee.entity.StringToSqlDate;
 import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;

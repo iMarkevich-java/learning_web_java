@@ -1,7 +1,7 @@
 package my.project.servlet.employee;
 
 import my.project.entity.Employee;
-import my.project.service.entity.EmployeeService;
+import my.project.service.employee.entity.EmployeeService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;

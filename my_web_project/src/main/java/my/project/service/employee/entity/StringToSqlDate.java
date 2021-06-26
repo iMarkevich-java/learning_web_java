@@ -1,4 +1,4 @@
-package my.project.service.entity;
+package my.project.service.employee.entity;
 
 import java.sql.Date;
 import java.text.ParseException;

@@ -1,10 +1,10 @@
-package my.project.service.entity;
+package my.project.service.employee.entity;
 
 import my.project.dao.hibernate.entity.QAEngineerHibernateDao;
 import my.project.dao.repository.QAEngineerRepositoryDao;
 import my.project.entity.QaEngineer;
 import my.project.exceptions.QAEngineerWebException;
-import my.project.service.communication.EmployeeQAEngineerCommunicationService;
+import my.project.service.employee.communication.EmployeeQAEngineerCommunicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

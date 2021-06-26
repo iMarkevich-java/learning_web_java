@@ -1,7 +1,7 @@
 package my.project.controller;
 
 import my.project.entity.Client;
-import my.project.service.entity.ClientService;
+import my.project.service.clients.entity.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

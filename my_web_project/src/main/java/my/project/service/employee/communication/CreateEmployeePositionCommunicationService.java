@@ -1,9 +1,9 @@
-package my.project.service.communication;
+package my.project.service.employee.communication;
 
 import my.project.entity.Positions;
-import my.project.service.entity.DeveloperService;
-import my.project.service.entity.ManagerService;
-import my.project.service.entity.QAEngineerService;
+import my.project.service.employee.entity.DeveloperService;
+import my.project.service.employee.entity.ManagerService;
+import my.project.service.employee.entity.QAEngineerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

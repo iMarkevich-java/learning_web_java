@@ -1,14 +1,14 @@
-package my.project.service.entity;
+package my.project.service.employee.entity;
 
 import my.project.dao.hibernate.entity.EmployeeHibernateDao;
 import my.project.dao.repository.EmployeeRepositoryDao;
 import my.project.entity.Employee;
 import my.project.exceptions.EmployeeWebException;
 import my.project.path.PathToFiles;
-import my.project.service.communication.EmployeeAddressCommunicationService;
-import my.project.service.communication.EmployeeDeveloperCommunicationService;
-import my.project.service.communication.EmployeeManagerCommunicationService;
-import my.project.service.communication.EmployeeQAEngineerCommunicationService;
+import my.project.service.employee.communication.EmployeeAddressCommunicationService;
+import my.project.service.employee.communication.EmployeeDeveloperCommunicationService;
+import my.project.service.employee.communication.EmployeeManagerCommunicationService;
+import my.project.service.employee.communication.EmployeeQAEngineerCommunicationService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,10 +1,10 @@
-package my.project.service.entity;
+package my.project.service.employee.entity;
 
 import my.project.dao.hibernate.entity.AddressHibernateDao;
 import my.project.dao.repository.AddressRepositoryDao;
 import my.project.entity.Address;
 import my.project.exceptions.AddressWebException;
-import my.project.service.communication.EmployeeAddressCommunicationService;
+import my.project.service.employee.communication.EmployeeAddressCommunicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

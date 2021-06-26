@@ -1,10 +1,10 @@
-package my.project.service.entity;
+package my.project.service.employee.entity;
 
 import my.project.dao.hibernate.entity.DeveloperHibernateDao;
 import my.project.dao.repository.DeveloperRepositoryDao;
 import my.project.entity.Developer;
 import my.project.exceptions.DeveloperWebException;
-import my.project.service.communication.EmployeeDeveloperCommunicationService;
+import my.project.service.employee.communication.EmployeeDeveloperCommunicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

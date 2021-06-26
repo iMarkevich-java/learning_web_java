@@ -1,7 +1,7 @@
 package my.project.servlet.project;
 
 import my.project.entity.Project;
-import my.project.service.entity.ProjectService;
+import my.project.service.employee.entity.ProjectService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

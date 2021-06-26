@@ -1,4 +1,4 @@
-package my.project.service.communication;
+package my.project.service.employee.communication;
 
 import my.project.dao.hibernate.communication.EmployeeAddressCommunicationHibernateDao;
 import my.project.dao.repository.EmployeeAddressCommunicationRepositoryDao;

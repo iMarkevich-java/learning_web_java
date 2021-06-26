@@ -1,33 +1,40 @@
 package my.project.controller;
 
+import my.project.entity.Client;
+import my.project.service.clients.entity.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.annotation.MultipartConfig;
+import java.util.List;
 
 @Controller
-@RequestMapping("/mvc/address/")
+@RequestMapping("/mvc/client/")
 @MultipartConfig(location = "C:/tmp/")
-public class AddressController {
+public class ClientController {
 
-//    @Autowired
+    //    @Autowired
 //    EmployeeService employeeService;
 //
-//    @Autowired
-//    AddressService addressService;
-//
+    @Autowired
+    ClientService clientService;
+
+    //
 //    @Autowired
 //    EmployeeAddressCommunicationService employeeAddressCommunicationService;
 //
 //    @Autowired
 //    CreateEmployeePositionCommunicationService createEmployeePositionCommunicationService;
 //
-//    @GetMapping(value = "/list")
-//    public String methodReturnEmployeeListPage(Model model) {
-//        List<Address> addressList = addressService.readAllAddress();
-//        model.addAttribute("addressesList", addressList);
-//        return "/address/addresses/index";
-//    }
+    @GetMapping(value = "/list")
+    public String methodReturnEmployeeListPage(Model model) {
+        List<Client> clientsList = clientService.readAllClient();
+        model.addAttribute("clientsList", clientsList);
+        return "/client/clients/index";
+    }
 //
 //    @GetMapping(value = "/delete")
 //    public String deleteEmployeeById(@RequestParam(name = "deleteEmployeeIdParam") String deleteEmployeeParam) {

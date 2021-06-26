@@ -15,12 +15,9 @@
     			<div class="logo"><a href="">Ваш<span class="black">Сайт</span><span class="gray">.net</span></a><p>Ваш первый бесплатный веб сайт</p></div>
     		    	<ul class="nav">
 					    <li><a href="${pageContext.request.contextPath}/mvc/start">Home</a></li>
-                        <li><a href="${pageContext.request.contextPath}/mvc/clients/list">Clients</a></li>
+                        <li><a href="${pageContext.request.contextPath}/mvc/client/list">Clients</a></li>
                         <li><a href="${pageContext.request.contextPath}/mvc/employee/list" class="active">Employees</a></li>
-                        <li><a href="${pageContext.request.contextPath}/mvc/developers/list">Developers</a></li>
-					    <li><a href="${pageContext.request.contextPath}/mvc/projects/list">Projects</a></li>
-					    <li><a href="${pageContext.request.contextPath}/mvc/address/list">Addresses</a></li>
-					    <li><a href="${pageContext.request.contextPath}/mvc/companies/list">Companies</a></li>
+                        <li><a href="${pageContext.request.contextPath}/mvc/project/list">Projects</a></li>
 				    </ul>
 			    </div>
 			    <div class="main">

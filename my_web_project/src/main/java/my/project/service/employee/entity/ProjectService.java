@@ -1,4 +1,4 @@
-package my.project.service.entity;
+package my.project.service.employee.entity;
 
 import my.project.dao.hibernate.entity.ProjectHibernateDao;
 import my.project.dao.repository.ProjectRepositoryDao;

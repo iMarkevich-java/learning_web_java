@@ -5,7 +5,7 @@ import my.project.exceptions.AddressWebException;
 import my.project.exceptions.AllEntityWebException;
 import my.project.exceptions.EmployeeWebException;
 import my.project.exceptions.PositionWebException;
-import my.project.service.entity.*;
+import my.project.service.employee.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

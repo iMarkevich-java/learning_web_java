@@ -1,7 +1,7 @@
 package my.project.servlet.client;
 
 import my.project.exceptions.ClientWebException;
-import my.project.service.entity.ClientService;
+import my.project.service.clients.entity.ClientService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

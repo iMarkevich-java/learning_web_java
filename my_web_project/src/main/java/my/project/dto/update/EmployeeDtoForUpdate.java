@@ -4,7 +4,7 @@ import my.project.dto.ConvertMultiPartFileToBlob;
 import my.project.entity.Employee;
 import my.project.exceptions.EmployeeWebException;
 import my.project.path.PathToFiles;
-import my.project.service.entity.EmployeeService;
+import my.project.service.employee.entity.EmployeeService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -55,7 +55,7 @@ public class EmployeeDtoForUpdate {
             flag = true;
         }
         if (updateEmployeeIdParam.isEmpty()) {
-            String errorMessage = "Employee id can't be empty!!!";
+            String errorMessage = "Employee photo can't be empty!!!";
             errorList.add(errorMessage);
             flag = true;
         }

@@ -1,24 +1,31 @@
 package my.project.controller;
 
+import my.project.entity.Project;
+import my.project.service.employee.entity.ProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
-@RequestMapping("/mvc/developers/")
-public class DeveloperController {
+import java.util.List;
 
-//    @Autowired
-//    DeveloperService developerService;
-//
+@Controller
+@RequestMapping("/mvc/project/")
+public class ProjectController {
+
+    @Autowired
+    ProjectService projectService;
+
 //    @Autowired
 //    CreateEmployeePositionCommunicationService createEmployeePositionCommunicationService;
 //
-//    @GetMapping(value = "/list")
-//    public String methodReturnDeveloperListPage(Model model) {
-//        List<Developer> developerList = developerService.readAllDeveloper();
-//        model.addAttribute("developersList", developerList);
-//        return "/developer/developers/index";
-//    }
+    @GetMapping(value = "/list")
+    public String methodReturnDeveloperListPage(Model model) {
+        List<Project> developerList = projectService.readAllProject();
+        model.addAttribute("developersList", developerList);
+        return "/project/projects/index";
+    }
 //
 //    @GetMapping(value = "/delete")
 //    public String deleteDeveloperById(@RequestParam(name = "deleteDeveloperIdParam") String deleteDeveloperIdParam) {
